@@ -1,13 +1,15 @@
 from django.urls import path
 from b14_pacilflix import settings
-from . import views
+from main.views import login, register, show_main
 from django.conf.urls.static import static
 
 app_name = 'main'
 
 
 urlpatterns = [
-    path('', views.show_main, name = 'show_main'),
+    path('', show_main, name = 'show_main'),
+    path('register/', register, name='register'),
+    path('login/', login, name='login'),
 ]
 
 if settings.DEBUG:

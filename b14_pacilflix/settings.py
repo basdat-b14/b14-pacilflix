@@ -30,7 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
+
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'media',
+    'media_tayangan',
     'koleksi',
     'users',
 ]
