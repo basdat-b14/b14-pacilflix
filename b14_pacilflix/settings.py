@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main',
     'koleksi',
     'users',
+    'media_tayangan',
 ]
 
 MIDDLEWARE = [
