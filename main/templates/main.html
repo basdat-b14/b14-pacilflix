@@ -1,34 +1,90 @@
 {% extends 'base.html' %}
-{% load static %} 
-
+{% load static %}
 
 {% block title %}
-Pacilflix
+PacilFlix | B14
 {% endblock %}
 
 {% block content %}
-    {% include 'navbar.html' %}
-    {% include 'preloader.html' %}
-<!-- Your main content here -->
-    <main>
-        <!--? slider Area Start-->
-        <section class="slider-area ">
-            <div class="slider-active">
-                <!-- Single Slider -->
-                <div class="single-slider slider-height d-flex align-items-center">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-7 col-md-12">
-                                <div class="hero__caption">
-                                    <h1 data-animation="fadeInLeft" data-delay="0.2s">Welcome to<br>PacilFlix</h1>
-                                    <p data-animation="fadeInLeft" data-delay="0.4s">Stream your favorite movies and tv series here.</p>
-                                    <a href="#" class="btn hero-btn" data-animation="fadeInLeft" data-delay="0.7s">Register</a>
-                                </div>
+{% include 'navbar.html' %}
+{% include 'preloader.html' %}
+
+<!-- Main content area -->
+<main>
+    <!-- Slider Area Start -->
+    <section class="slider-area">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height d-flex align-items-center justify-content-center" style="height: 100vh;">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-6 col-lg-7 col-md-8">
+                            <div class="center-box">
+                                <h1>PacilFlix -14</h1>
+                                <button type="button" class="btn btn-primary" id="button_login" data-bs-dismiss="modal" onclick="Login()">Login</button>
+                                <button type="button" class="btn btn-primary" id="button_register" data-bs-dismiss="modal" onclick="Register()">Register</button>
                             </div>
                         </div>
-                    </div>          
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
+
+<!-- Styles specifically for the center-box in this template -->
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .slider-height {
+        height: 100vh; /* Ensures the slider takes full viewport height */
+    }
+    .center-box {
+        text-align: center;
+        padding: 70px; /* Increased padding */
+        background-color: rgb(157, 119, 198);
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        width: auto;
+        max-width: 700px; /* Increased max-width for a larger box */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 30px; /* Increased margin for better visual separation */
+    }
+    .btn {
+        width: 100%; /* Full width button */
+        padding: 10px 0;
+        margin: 5px 0; /* Adjusted for vertical stacking */
+        font-size: 16px;
+        color: white;
+        background-color: #476e98;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+        background-color: #8bc3ff;
+    }
+</style>
+
+<script>
+    function Login() {
+        window.location.href = '{% url "main:login" %}'; 
+    }
+    
+    function Register() {
+        window.location.href = '{% url "main:register" %}'; 
+    }
+</script>
+
 {% endblock %}
