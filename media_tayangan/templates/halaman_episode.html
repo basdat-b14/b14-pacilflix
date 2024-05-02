@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Halaman Episode
+{% endblock %}
+
+{% block content %}
+<style>
+    .custom-btn {
+        background-color: #c3e6cb;
+        color: black;
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .custom-btn-ep {
+        background-color: #d088fc;
+        color: black;
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        margin-right: 10px;
+    }
+</style>
+
+<main>
+    <body>
+        <div class="container m-5">
+            <div class="text-center">
+                <h1>HALAMAN EPISODE</h1>
+            </div>
+
+            <h3 class="pl-5 pt-5 pb-2"><b>Judul:</b> Squid Game</h3>
+            <h3 class="pl-5 pb-2"><b>Sub Judul:</b> Red Light, Green Light</h3>
+
+            <div class="d-flex justify-content-start pl-5 pb-5">
+                <button type="button" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton Episode</button>
+            </div>
+
+            <h3 class="pl-5 pb-1"><b>Episode Lainnya:</b></h3>
+            <div class="d-flex justify-content-start pl-5 pb-5">
+                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 2</button>
+                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 3</button>
+                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 4</button>
+                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 5</button>
+            </div>
+
+            <h3 class="pl-5 pb-2"><b>Sinopsis Episode:</b> Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</h3>
+            <h3 class="pl-5 pb-2"><b>Durasi Episode:</b> 61 menit</h3>
+            <h3 class="pl-5 pb-2"><b>URL Episode:</b> https://pacilflix.com/watch/30123467</h3>
+            <h3 class="pl-5 pb-2"><b>Tanggal Rilis Episode:</b> 2021-09-17</h3>
+            
+        </div>
+    </body>
+</main>
+
+{% endblock %}
