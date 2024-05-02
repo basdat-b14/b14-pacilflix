@@ -20,7 +20,7 @@
                                 <div class="main-menu d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">    
-                                                                                                                                 
+                                            {% if user.is_authenticated %}                                                                                      
                                             <li><a href="#">Daftar Tayangan</a></li>
                                             <li><a href="{% url 'contributor_list' %}">Daftar Kontributor</a></li>
                                             <li><a href="#">Kelola</a>
@@ -31,7 +31,9 @@
                                                 </ul>
                                             </li>
                                             <li class="button-header"><a href="#" class="btn btn3">Log out</a></li> 
-                                            
+                                            {% else %}
+                                            <li class="active" ><a href="#">Trailer Tayangan</a></li>
+                                            {% endif %}
                                         </ul>
                                     </nav>
                                 </div>
