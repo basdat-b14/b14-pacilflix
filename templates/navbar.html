@@ -11,7 +11,7 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2">
                             <div class="logo">
-                                <a href="#"><img src="{% static 'img/logo/logo.png' %}" alt=""></a>
+                                <a href="#"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt="" style="width: 100px; height: auto;"></a>
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10">
@@ -21,7 +21,7 @@
                                     <nav>
                                         <ul id="navigation">    
                                             {% if user.is_authenticated %}                                                                                      
-                                            <li><a href="#">Daftar Tayangan</a></li>
+                                            <li><a href="{% url 'tayangan_view' %}">Daftar Tayangan</a></li>
                                             <li><a href="{% url 'contributor_list' %}">Daftar Kontributor</a></li>
                                             <li><a href="#">Kelola</a>
                                                 <ul class="submenu">
@@ -32,7 +32,7 @@
                                             </li>
                                             <li class="button-header"><a href="#" class="btn btn3">Log out</a></li> 
                                             {% else %}
-                                            <li class="active" ><a href="#">Trailer Tayangan</a></li>
+                                            <li class="active" ><a href="{% url 'trailer_view' %}">Trailer Tayangan</a></li>
                                             {% endif %}
                                         </ul>
                                     </nav>
