@@ -34,6 +34,47 @@ PacilFlix | Halaman Series
     <body style="background-color: #E0BBE4;">
         <div class="container m-5">
             <div class="shadow pt-5 p-4 mb-5 bg-white rounded">
+                {% comment %} modal daftar favorit {% endcomment %}
+                <div id="favoritesModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between align-items-center">
+                            <h5 class="modal-title">Tambahkan ke Daftar Favorit</h5>
+                            
+                        </div>
+                        <div class="modal-body d-flex justify-content-between align-items-center">
+                            <label for="favoritesList" class="mb-0">Daftar Favorit:</label>
+                            <div class="form-group mb-0">
+                                <select class="form-control" id="favoritesList">
+                                    <option>Daftar Favorit 1</option>
+                                    <option>Daftar Favorit 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" id="addToFavoritesBtn">Tambah</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                {% comment %} modal unduuhan {% endcomment %}
+                <div id="downloadModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title"><b>Sukses menambahkan tayangan ke daftar unduhan</b></h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Selamat! Anda telah berhasil mengunduh <span id="downloadedTitle"></span> dan akan berlaku hingga <span id="expirationDate"></span>. Cek informasi selengkapnya pada halaman daftar unduhan.</p>
+                          <a href="#" class="btn btn-primary">Unduhan</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 <div class="text-center">
                     <h1>HALAMAN SERIES</h1>
                 </div>
@@ -145,5 +186,62 @@ PacilFlix | Halaman Series
         </div>
     </body>
 </main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Ambil referensi ke tombol "Tambah ke Favorit"
+const addToFavoritesBtn = document.querySelector('.custom-btn:last-child');
+
+// Ambil referensi ke modal
+const favoritesModal = document.getElementById('favoritesModal');
+
+// Tambahkan event listener pada tombol "Tambah ke Favorit"
+addToFavoritesBtn.addEventListener('click', () => {
+  // Munculkan modal
+  $(favoritesModal).modal('show');
+});
+
+// Ambil referensi ke tombol "Tambah" di dalam modal
+const addToFavoritesModalBtn = document.getElementById('addToFavoritesBtn');
+
+// Tambahkan event listener pada tombol "Tambah"
+addToFavoritesModalBtn.addEventListener('click', () => {
+  // Sembunyikan modal
+  $(favoritesModal).modal('hide');
+
+  // Tampilkan pesan sukses
+  alert('Sukses!');
+});
+
+// Ambil referensi ke tombol "Unduh"
+const downloadBtn = document.querySelectorAll('.custom-btn')[0];
+
+// Ambil referensi ke modal unduhan
+const downloadModal = document.getElementById('downloadModal');
+
+// Ambil referensi ke elemen span untuk judul tayangan dan tanggal kedaluwarsa
+const downloadedTitleSpan = document.getElementById('downloadedTitle');
+const expirationDateSpan = document.getElementById('expirationDate');
+
+// Tambahkan event listener pada tombol "Unduh"
+downloadBtn.addEventListener('click', () => {
+  // Ambil judul tayangan dari halaman
+  const seriesTitle = document.querySelector('h4 > b').nextSibling.textContent.trim();
+
+  // Hitung tanggal kedaluwarsa (7 hari dari sekarang)
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 7);
+
+  // Atur nilai elemen span dengan judul tayangan dan tanggal kedaluwarsa
+  downloadedTitleSpan.textContent = seriesTitle;
+  expirationDateSpan.textContent = expirationDate.toLocaleDateString();
+
+  // Munculkan modal
+  $(downloadModal).modal('show');
+}); 
+</script>
+
+
 
 {% endblock %}
