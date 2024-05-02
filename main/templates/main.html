@@ -9,13 +9,13 @@ PacilFlix | B14
 {% include 'navbar.html' %}
 {% include 'preloader.html' %}
 
-<!-- Main content area -->
-<main>
+<!-- Main content area, adjusted to avoid navbar overlap -->
+<main">
     <!-- Slider Area Start -->
     <section class="slider-area">
         <div class="slider-active">
             <!-- Single Slider -->
-            <div class="single-slider slider-height d-flex align-items-center justify-content-center" style="height: 100vh;">
+            <div class="single-slider slider-height d-flex align-items-center justify-content-center">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-xl-6 col-md-8">
@@ -34,17 +34,25 @@ PacilFlix | B14
 
 <!-- Styles specifically for the center-box in this template -->
 <style>
+    .navbar {
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    z-index: 1030; /* high z-index to ensure it stays on top of other content */
+    }
+
     body {
         margin: 0;
-        padding: 0;
+        padding: 10;
         box-sizing: border-box;
     }
     .slider-height {
-        height: 50vh; 
+        height: 100vh; 
     }
     .center-box {
+        position: relative;
         text-align: center;
-        padding: 70px; 
+        padding: 80px; 
         background-color: rgb(157, 119, 198);
         border: 1px solid #ddd;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -58,12 +66,12 @@ PacilFlix | B14
     }
     h1 {
         color: #fbfbfb;
-        margin-bottom: 30px; /* Increased margin for better visual separation */
+        margin-bottom: 30px;
     }
     .btn {
-        width: 100%; /* Full width button */
+        width: 100%;
         padding: 10px 0;
-        margin: 5px 0; /* Adjusted for vertical stacking */
+        margin: 5px 0;
         font-size: 16px;
         color: white;
         background-color: #476e98;
