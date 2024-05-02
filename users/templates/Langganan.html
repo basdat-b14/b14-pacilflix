@@ -15,112 +15,134 @@ PacilFlix | Manage Subscription
         <!-- Current Active Subscription -->
         <div class="active-subscription" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-bottom: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Paket Langganan Aktif Anda</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Harga</th>
-                        <th>Resolusi Layar</th>
-                        <th>Dukungan Perangkat</th>
-                        <th>Tanggal Dimulai</th>
-                        <th>Tanggal Akhir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Standard</td>
-                        <td>80000</td>
-                        <td>1080p</td>
-                        <td>Tablet</td>
-                        <td>2024-04-29</td>
-                        <td>2024-04-30</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Harga</th>
+                            <th>Resolusi Layar</th>
+                            <th>Dukungan Perangkat</th>
+                            <th>Tanggal Dimulai</th>
+                            <th>Tanggal Akhir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard</td>
+                            <td>80000</td>
+                            <td>1080p</td>
+                            <td>Tablet</td>
+                            <td>2024-04-29</td>
+                            <td>2024-04-30</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Available Packages -->
         <div class="available-packages" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-bottom: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Pilih Paket Lain</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Harga</th>
-                        <th>Resolusi Layar</th>
-                        <th>Dukungan Perangkat</th>
-                        <th>Beli</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Basic</td>
-                        <td>50000</td>
-                        <td>720p</td>
-                        <td>Mobile, Tablet</td>
-                        <td><a href="{% url 'buy_package' package_type='basic' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                    </tr>
-                    <tr>
-                        <td>Standard</td>
-                        <td>80000</td>
-                        <td>1080p</td>
-                        <td>Mobile, Tablet, Computer</td>
-                        <td><a href="{% url 'buy_package' package_type='standard' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                    </tr>
-                    <tr>
-                        <td>Premium</td>
-                        <td>120000</td>
-                        <td>4K</td>
-                        <td>Mobile, Tablet, Computer, TV</td>
-                        <td><a href="{% url 'buy_package' package_type='premium' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                    </tr>
-                </tbody>
-                
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Harga</th>
+                            <th>Resolusi Layar</th>
+                            <th>Dukungan Perangkat</th>
+                            <th>Beli</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Basic</td>
+                            <td>50000</td>
+                            <td>720p</td>
+                            <td>Mobile, Tablet</td>
+                            <td><a href="{% url 'buy_package' package_type='basic' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
+                        </tr>
+                        <tr>
+                            <td>Standard</td>
+                            <td>80000</td>
+                            <td>1080p</td>
+                            <td>Mobile, Tablet, Computer</td>
+                            <td><a href="{% url 'buy_package' package_type='standard' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
+                        </tr>
+                        <tr>
+                            <td>Premium</td>
+                            <td>120000</td>
+                            <td>4K</td>
+                            <td>Mobile, Tablet, Computer, TV</td>
+                            <td><a href="{% url 'buy_package' package_type='premium' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
         </div>
 
         <!-- Transaction History -->
         <div class="transaction-history" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-bottom: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Transaction History</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Package Name</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Payment Method</th>
-                        <th>Payment Date</th>
-                        <th>Total Payment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Basic</td>
-                        <td>15/03/2018 8:35:59</td>
-                        <td>15/03/2018 12:05:23</td>
-                        <td>Kartu Kredit</td>
-                        <td>15/03/2018 12:05:58</td>
-                        <td>50000</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Package Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Payment Method</th>
+                            <th>Payment Date</th>
+                            <th>Total Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Basic</td>
+                            <td>15/03/2018 8:35:59</td>
+                            <td>15/03/2018 12:05:23</td>
+                            <td>Kartu Kredit</td>
+                            <td>15/03/2018 12:05:58</td>
+                            <td>50000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>
 
 <style>
     .beli-btn {
-        background-color: #6a5acd; /* Lighter purple */
+        background-color: #6a5acd;
         color: white;
         border: none;
-        border-radius: 6px !important; /* Ensure this style is applied */
+        border-radius: 6px !important; 
         padding: 8px 16px;
     }
     
     .beli-btn:hover {
-        background-color: #5e4ab1; /* Slightly darker on hover */
+        background-color: #5e4ab1; 
     }
-    
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .beli-btn {
+            width: 100%;
+            margin-bottom: 10px; 
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+    }
 </style>
 
 {% endblock %}

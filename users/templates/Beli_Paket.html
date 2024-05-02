@@ -11,7 +11,7 @@ PacilFlix | Beli Paket
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
 <main class="py-4" style="background-color: #E0BBE4; padding-top: 5rem;">
-    <div class="container" style="position: relative; max-width: 600px; margin: auto;">
+    <div class="container center-box" style="position: relative; max-width: 600px; margin: auto;">
         <!-- Close button aligned with the header -->
         <a href="{% url 'subscription_page' %}" style="position: absolute; right: 10px; top: 10px; font-size: 24px; color: #6a5acd;">
             <i class="fas fa-times"></i>
@@ -37,7 +37,7 @@ PacilFlix | Beli Paket
                 <option value="flip">Flip</option>
             </select>
             
-            <button class="btn btn-primary mb-3" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
+            <button class="btn btn-primary mb-3 detail-button" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
             
         </div>
     </div>
@@ -45,35 +45,54 @@ PacilFlix | Beli Paket
 
 <style>
     html, body {
-        height: 100%; /* Ensure they take the full viewport height */
+        height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #E0BBE4; /* Ensure background color covers entire page */
+        background-color: #E0BBE4;
     }
     
     body {
         display: flex;
-        flex-direction: column; /* Aligns children (e.g., header, main, footer) in a column */
+        flex-direction: column;
     }
     
     main {
-        flex: 1; /* Takes up all available space left by header/footer */
-        background-color: #E0BBE4; /* Same background color as body for consistency */
+        flex: 1;
+        background-color: #E0BBE4;
         padding-top: 5rem;
-        padding-bottom: 5rem; /* Add padding to ensure content does not touch the edges */
+        padding-bottom: 5rem;
     }
     
     .container {
-        width: 100%; /* Full width of its parent */
-        max-width: 600px; /* Or whatever max width you prefer */
-        margin: auto; /* Centers the container */
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        background-color: #fff; /* Background of the content area */
+        background-color: #fff;
         border-radius: 8px;
         padding: 20px;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .center-box {
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .filter-buttons .btn {
+            margin: 0 2px;
+            padding: 5px;
+        }
+        .detail-button {
+            padding: 2px 5px;
+        }
+        table {
+            margin-top: 10px;
+        }
+        ul li {
+            line-height: 1.4;
+        }
+    }
 </style>
-
-
 
 {% endblock %}
