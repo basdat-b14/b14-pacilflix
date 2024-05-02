@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+PacilFlix | Beli Paket
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+<main class="py-4" style="background-color: #E0BBE4; padding-top: 5rem;">
+    <div class="container" style="position: relative; max-width: 600px; margin: auto;">
+        <!-- Close button aligned with the header -->
+        <a href="{% url 'subscription_page' %}" style="position: absolute; right: 10px; top: 10px; font-size: 24px; color: #6a5acd;">
+            <i class="fas fa-times"></i>
+        </a>
+
+        <div class="text-center mb-4">
+            <h1 style="display: inline-block; margin-right: 30px;">Beli Paket</h1>
+        </div>
+
+        <div class="purchase-info" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h2>Informasi Paket</h2>
+            <p><strong>Nama:</strong> {{ package.name }}</p>
+            <p><strong>Harga:</strong> {{ package.price }} IDR</p>
+            <p><strong>Resolusi Layar:</strong> {{ package.resolution }}</p>
+            <p><strong>Dukungan Perangkat:</strong> {{ package.support }}</p>
+
+            <h3>Pilih Metode Pembayaran:</h3>
+            <select class="form-control mb-3" style="width: 100%; margin-bottom: 10px;">
+                <option value="credit_card">Kartu Kredit</option>
+                <option value="ovo">OVO</option>
+                <option value="virtual_account">Virtual Account</option>
+                <option value="gopay">GoPay</option>
+                <option value="flip">Flip</option>
+            </select>
+            
+            <button class="btn btn-primary mb-3" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
+            
+        </div>
+    </div>
+</main>
+
+<style>
+    html, body {
+        height: 100%; /* Ensure they take the full viewport height */
+        margin: 0;
+        padding: 0;
+        background-color: #E0BBE4; /* Ensure background color covers entire page */
+    }
+    
+    body {
+        display: flex;
+        flex-direction: column; /* Aligns children (e.g., header, main, footer) in a column */
+    }
+    
+    main {
+        flex: 1; /* Takes up all available space left by header/footer */
+        background-color: #E0BBE4; /* Same background color as body for consistency */
+        padding-top: 5rem;
+        padding-bottom: 5rem; /* Add padding to ensure content does not touch the edges */
+    }
+    
+    .container {
+        width: 100%; /* Full width of its parent */
+        max-width: 600px; /* Or whatever max width you prefer */
+        margin: auto; /* Centers the container */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background-color: #fff; /* Background of the content area */
+        border-radius: 8px;
+        padding: 20px;
+    }
+</style>
+
+
+
+{% endblock %}

@@ -14,19 +14,23 @@ def show_main(request):
     return render(request, 'main.html')
 
 def register(request):
+    print("masuk regist")
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            print("bisa buat akun")
             user = form.save()
             login(request, user)  # Automatically log in the user after registration
             return redirect('main.html')
         else:
+            print("gabisa buat akun")
             messages.error(request, "Invalid registration credentials. Please try again.")
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 def login(request):
+    print("masuk login")
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
