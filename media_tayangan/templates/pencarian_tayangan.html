@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Trailer Tayangan
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-size: 150%;
+    }
+    .btn-custom {
+        background-color: #c3e6cb;
+        color: black;
+        padding: 8px 5px;
+        font-size: 10.85px;
+        border-radius: 5px;
+        border: none;
+    }
+</style>
+
+<main>
+    <body>
+        <div class="container m-5">
+            <div class="text-center">
+                <h1>HASIL PENCARIAN</h1>
+            </div>
+
+            <div class="input-group rounded m-3 p-3">
+                <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <a href="{% url 'cari_trailer' %}"><i class="fas fa-search"></i></a>
+                </span>
+            </div>
+
+            <div class="text-center p-2">
+                <h3>Film</h3>
+            </div>
+
+            <div class="table-responsive p-3 text-center">
+                <table class="table table-hover" style="font-size: 80%;">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th scope="col" style="vertical-align: middle">Judul</th>
+                            <th scope="col" style="vertical-align: middle">Sinopsis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">URL Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Tanggal Rilis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Tayangan</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Oppenheimer</td>
+                            <td>Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</td>
+                            <td>https://pacilflix.com/watch/30123456</td>
+                            <td>2023-11-07</td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a href="{% url 'film_view' %}" class="btn-custom">See more</a>                                
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</main>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Trailer Tayangan
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <body>
+        <div class="container m-5">
+            <div class="text-center">
+                <h1>DAFTAR TAYANGAN</h1>
+            </div>
+
+            <div class="input-group rounded m-3 p-3">
+                <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <a href="{% url 'cari_trailer' %}"><i class="fas fa-search"></i></a>
+                </span>
+            </div>
+
+            <div class="text-center pt-3">
+                <h3>10 Tayangan Terbaik Minggu Ini</h3>
+            </div>
+
+            <div class="text-center">
+                <div class="form-check form-check-inline" style="font-size: 75%;">
+                    <input class="form-check-input" type="radio" name="top10" id="global" checked>
+                    <label class="form-check-label" for="global">Top 10 Global</label>
+                </div>
+                <div class="form-check form-check-inline" style="font-size: 75%;">
+                    <input class="form-check-input" type="radio" name="top10" id="country">
+                    <label class="form-check-label" for="country">Top 10 di Negara Pengguna</label>
+                </div>
+            </div>
+
+            <div class="table-responsive p-3 text-center">
+                <table class="table table-hover" style="font-size: 80%;">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th scope="col" style="vertical-align: middle">Peringkat</th>
+                            <th scope="col" style="vertical-align: middle">Judul</th>
+                            <th scope="col" style="vertical-align: middle">Sinopsis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">URL Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Tanggal Rilis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Total View 7 Hari Terakhir</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Oppenheimer</td>
+                            <td>Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</td>
+                            <td>https://pacilflix.com/watch/30123456</td>
+                            <td>2023-11-07</td>
+                            <td>100000</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Pride and Prejudice</td>
+                            <td>Petualangan mistis seorang gadis muda yang menemukan dunia fantasi yang menantang kenyataan perang dan kebrutalan.</td>
+                            <td>https://pacilflix.com/watch/30123461</td>
+                            <td>2020-06-16</td>
+                            <td>90000</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Toy Story 2</td>
+                            <td>Drama mendebarkan tentang upaya bangsa untuk bertahan hidup dalam menghadapi bencana alam yang tidak terhindarkan.</td>
+                            <td>https://pacilflix.com/watch/30123460</td>
+                            <td>2016-05-20</td>
+                            <td>85000</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td>Squid Game</td>
+                            <td>Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</td>
+                            <td>https://pacilflix.com/watch/30123467</td>
+                            <td>2017-11-12</td>
+                            <td>60000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center p-2">
+                <h3>Film</h3>
+            </div>
+
+            <div class="table-responsive p-3 text-center">
+                <table class="table table-hover" style="font-size: 80%;">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th scope="col" style="vertical-align: middle">Judul</th>
+                            <th scope="col" style="vertical-align: middle">Sinopsis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">URL Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Tanggal Rilis Trailer</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Oppenheimer</td>
+                            <td>Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</td>
+                            <td>https://pacilflix.com/watch/30123456</td>
+                            <td>2023-11-07</td>
+                        </tr>
+                        <tr>
+                            <td>Pride and Prejudice</td>
+                            <td>Petualangan mistis seorang gadis muda yang menemukan dunia fantasi yang menantang kenyataan perang dan kebrutalan.</td>
+                            <td>https://pacilflix.com/watch/30123461</td>
+                            <td>2020-06-16</td>
+                        </tr>
+                        <tr>
+                            <td>Toy Story 2</td>
+                            <td>Drama mendebarkan tentang upaya bangsa untuk bertahan hidup dalam menghadapi bencana alam yang tidak terhindarkan.</td>
+                            <td>https://pacilflix.com/watch/30123460</td>
+                            <td>2016-05-20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center p-2">
+                <h3>Series</h3>
+            </div>
+
+            <div class="table-responsive p-3 text-center">
+                <table class="table table-hover" style="font-size: 80%;">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th scope="col" style="vertical-align: middle">Judul</th>
+                            <th scope="col" style="vertical-align: middle">Sinopsis Trailer</th>
+                            <th scope="col" style="vertical-align: middle">URL Trailer</th>
+                            <th scope="col" style="vertical-align: middle">Tanggal Rilis Trailer</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Squid Game</td>
+                            <td>Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</td>
+                            <td>https://pacilflix.com/watch/30123467</td>
+                            <td>2017-11-12</td>
+                        </tr>
+                        <tr>
+                            <td>Stranger Things</td>
+                            <td>Kisah intim dan visual yang menarik tentang kehidupan sehari-hari dan tantangan besar dalam masyarakat Meksiko.</td>
+                            <td>https://pacilflix.com/watch/30123468</td>
+                            <td>2018-02-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</main>
+
+{% endblock %}

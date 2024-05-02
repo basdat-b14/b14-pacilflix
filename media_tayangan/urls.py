@@ -1,7 +1,12 @@
 from django.urls import path
-from media_tayangan.views import trailer_view
+from media_tayangan.views import *
 
 urlpatterns = [
-    # Other URL patterns
-    path('trailer_tayangan', trailer_view, name='trailer_view'),
+    path('trailer', trailer_view, name='trailer_view'),
+    path('cari-trailer', cari_trailer, name='cari_trailer'),
+    path('tayangan', tayangan_view, name='tayangan_view'),
+    path('cari-tayangan', cari_tayangan, name='cari_tayangan'),
+    path('series', series_view, name='series_view'),
+    path('film', film_view, name='film_view'),
+    path('episode', episode_view, name='episode_view'),
 ]
