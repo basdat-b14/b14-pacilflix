@@ -2,14 +2,16 @@
 {% load static %}
 
 {% block title %}
-Halaman Film
+PacilFlix | Halaman Film
 {% endblock %}
 
 {% block content %}
+{% include 'navbar.html' %}
+
 <style>
     .custom-btn {
-        background-color: #c3e6cb;
-        color: black;
+        background-color: #6a5acd;
+        color: rgb(255, 255, 255); 
         padding: 8px 10px;
         font-size: 14px;
         border-radius: 5px;
@@ -18,100 +20,108 @@ Halaman Film
     }
 </style>
 
-<main>
-    <body>
+<main class="py-4" style="padding-top: 4rem;">
+    <body style="background-color: #E0BBE4;">
         <div class="container m-5">
-            <div class="text-center">
-                <h1>HALAMAN FILM</h1>
-            </div>
-
-            <h3 class="pl-5 pt-5 pb-2"><b>Judul:</b> Oppenheimer</h3>
-            <div class="d-flex justify-content-start pl-5 pb-5">
-                <button type="button" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton</button>
-                <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
-                <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
-            </div>
-
-            <h3 class="pl-5 pb-2"><b>Total View:</b> 100000</h3>
-            <h3 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> 4.9</h3>
-            <h3 class="pl-5 pb-2"><b>Sinopsis:</b> Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</h3>
-            <h3 class="pl-5 pb-2"><b>Durasi Film:</b> 169 menit</h3>
-            <h3 class="pl-5 pb-2"><b>Tanggal Rilis Film:</b> 2023-07-19</h3>
-            <h3 class="pl-5 pb-2"><b>URL Film:</b> https://pacilflix.com/watch/30123456</h3>
-            <h3 class="pl-5 pb-2">
-                <b>Genre:</b>
-                <ul>
-                    <li>- Historical drama</li>
-                    <li>- Thriller</li>
-                </ul>
-            </h3>
-            <h3 class="pl-5 pb-2"><b>Asal Negara:</b> Amerika Serikat</h3>
-            <h3 class="pl-5 pb-2">
-                <b>Pemain:</b>
-                <ul>
-                    <li>- Cillian Murphy</li>
-                    <li>- Emily Blunt</li>
-                    <li>- Robert Downey Jr</li>
-                </ul>
-            </h3>
-            <h3 class="pl-5 pb-2">
-                <b>Penulis Skenario:</b>
-                <ul>
-                    <li>- Christopher Nolan</li>
-                    <li>- Kai Bird</li>
-                </ul>
-            </h3>
-            <h3 class="pl-5 pb-2"><b>Sutradara:</b> Christopher Nolan</h3>
-
-            <div class="pl-5 pt-5 pb-2">
-                <h3><b>Tambah Ulasan</b></h3>
-            </div>
-
-            <div class="row pl-5 pb-2">
-                <div class="col-md-6">
-                    <form>
-                        <div class="form-group">
-                            <h4>Tuliskan deskripsi ulasan</h4>
-                            <textarea class="form-control" id="reviewDescription" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <h4>Rating film</h4>
-                            <input type="number" class="form-control" id="rating" step="0.5" min="1" max="5">
-                        </div>
-                        <button type="submit" class="custom-btn">Submit</button>
-                    </form>
+            <div class="shadow pt-5 p-4 mb-5 bg-white rounded">
+                <div class="text-center">
+                    <h1>HALAMAN FILM</h1>
                 </div>
+
+                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> Oppenheimer</h4>
+                <div class="d-flex justify-content-start pl-5 pb-5">
+                    <button type="button" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton</button>
+                    <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
+                    <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
+                </div>
+
+                <h4 class="pl-5 pb-2"><b>Total View:</b> 100000</h4>
+                <h4 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> 4.9</h4>
+                <h4 class="pl-5 pb-2"><b>Sinopsis:</b> Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</h4>
+                <h4 class="pl-5 pb-2"><b>Durasi Film:</b> 169 menit</h4>
+                <h4 class="pl-5 pb-2"><b>Tanggal Rilis Film:</b> 2023-07-19</h4>
+                <h4 class="pl-5 pb-2"><b>URL Film:</b> https://pacilflix.com/watch/30123456</h4>
+                <h4 class="pl-5 pb-2">
+                    <b>Genre:</b>
+                    <ul>
+                        <li>- Historical drama</li>
+                        <li>- Thriller</li>
+                    </ul>
+                </h4>
+                <h4 class="pl-5 pb-2"><b>Asal Negara:</b> Amerika Serikat</h4>
+                <h4 class="pl-5 pb-2">
+                    <b>Pemain:</b>
+                    <ul>
+                        <li>- Cillian Murphy</li>
+                        <li>- Emily Blunt</li>
+                        <li>- Robert Downey Jr</li>
+                    </ul>
+                </h4>
+                <h4 class="pl-5 pb-2">
+                    <b>Penulis Skenario:</b>
+                    <ul>
+                        <li>- Christopher Nolan</li>
+                        <li>- Kai Bird</li>
+                    </ul>
+                </h4>
+                <h4 class="pl-5 pb-2"><b>Sutradara:</b> Christopher Nolan</h4>
             </div>
 
-            <div class="pl-5 pt-5">
-                <h3><b>Daftar Ulasan</b></h3>
-            </div>
+            <div class="shadow pt-5 pr-5 mb-5 bg-white rounded">
+                <div class="text-center">
+                    <h1>ULASAN</h1>
+                </div>
 
-            <div class="row pl-5 pt-3">
-                <div class="col-md-6 mb-5">
-                    <div class="card" style="width: 100%;">
-                        <div class="card-body">
-                            <h4 class="card-title">Username</h4>
-                            <h4 class="card-subtitle mb-2 text-muted">Rating</h4>
-                            <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
-                        </div>
+                <div class="pl-5 pt-5 pb-2">
+                    <h3><b>Tambah Ulasan</b></h3>
+                </div>
+
+                <div class="row pl-5 pb-2">
+                    <div class="col-md-6">
+                        <form>
+                            <div class="form-group">
+                                <h4>Tuliskan deskripsi ulasan</h4>
+                                <textarea class="form-control" id="reviewDescription" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <h4>Rating film</h4>
+                                <input type="number" class="form-control" id="rating" step="0.1" min="1" max="5">
+                            </div>
+                            <button type="submit" class="custom-btn">Submit</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-6 mb-5">
-                    <div class="card" style="width: 100%;">
-                        <div class="card-body">
-                            <h4 class="card-title">Username</h4>
-                            <h4 class="card-subtitle mb-2 text-muted">Rating</h4>
-                            <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+
+                <div class="pl-5 pt-5">
+                    <h3><b>Daftar Ulasan</b></h3>
+                </div>
+
+                <div class="row pl-5 pt-3">
+                    <div class="col-md-6 mb-5">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h4 class="card-title">Username</h4>
+                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
+                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 mb-5">
-                    <div class="card" style="width: 100%;">
-                        <div class="card-body">
-                            <h4 class="card-title">Username</h4>
-                            <h4 class="card-subtitle mb-2 text-muted">Rating</h4>
-                            <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                    <div class="col-md-6 mb-5">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h4 class="card-title">Username</h4>
+                                <h4 class="card-subtitle mb-2 text-muted">Rating: 5</h4>
+                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h4 class="card-title">Username</h4>
+                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
+                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
