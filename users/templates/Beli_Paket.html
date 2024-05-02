@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+PacilFlix | Beli Paket
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+<main class="py-4" style="background-color: #E0BBE4; padding-top: 5rem;">
+    <div class="container center-box" style="position: relative; max-width: 600px; margin: auto;">
+        <!-- Close button aligned with the header -->
+        <a href="{% url 'subscription_page' %}" style="position: absolute; right: 10px; top: 10px; font-size: 24px; color: #6a5acd;">
+            <i class="fas fa-times"></i>
+        </a>
+
+        <div class="text-center mb-4">
+            <h1 style="display: inline-block; margin-right: 30px;">Beli Paket</h1>
+        </div>
+
+        <div class="purchase-info" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h2>Informasi Paket</h2>
+            <p><strong>Nama:</strong> {{ package.name }}</p>
+            <p><strong>Harga:</strong> {{ package.price }} IDR</p>
+            <p><strong>Resolusi Layar:</strong> {{ package.resolution }}</p>
+            <p><strong>Dukungan Perangkat:</strong> {{ package.support }}</p>
+
+            <h3>Pilih Metode Pembayaran:</h3>
+            <select class="form-control mb-3" style="width: 100%; margin-bottom: 10px;">
+                <option value="credit_card">Kartu Kredit</option>
+                <option value="ovo">OVO</option>
+                <option value="virtual_account">Virtual Account</option>
+                <option value="gopay">GoPay</option>
+                <option value="flip">Flip</option>
+            </select>
+            
+            <button class="btn btn-primary mb-3 detail-button" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
+            
+        </div>
+    </div>
+</main>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #E0BBE4;
+    }
+    
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    main {
+        flex: 1;
+        background-color: #E0BBE4;
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .center-box {
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .filter-buttons .btn {
+            margin: 0 2px;
+            padding: 5px;
+        }
+        .detail-button {
+            padding: 2px 5px;
+        }
+        table {
+            margin-top: 10px;
+        }
+        ul li {
+            line-height: 1.4;
+        }
+    }
+</style>
+
+{% endblock %}
