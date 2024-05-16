@@ -23,12 +23,14 @@ PacilFlix | Tralier Tayangan
                         <h1>DAFTAR TAYANGAN</h1>
                     </div>
 
-                    <div class="input-group rounded m-3 p-3">
-                        <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
-                        <span class="input-group-text border-0" id="search-addon">
-                            <a href="{% url 'cari_trailer' %}"><i class="fas fa-search" style="color: rgb(0, 0, 0);"></i></a>
-                        </span>
-                    </div>
+                    <form action="{% url 'cari_trailer' %}" method="GET">
+                        <div class="input-group rounded m-3 p-3">
+                            <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                            <button type="submit" class="input-group-text border-0" id="search-addon">
+                                <i class="fas fa-search" style="color: rgb(0, 0, 0);"></i>
+                            </button>
+                        </div>
+                    </form>                    
 
                     <div class="text-center pt-3">
                         <h3>10 Tayangan Terbaik Minggu Ini</h3>
