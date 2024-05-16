@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+PacilFlix | Manage Subscription
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container m-5 text-center">
+    <div class="title indigo mb-5">Dashboard Pengguna</div>
+    
+    <table class="text-left m-auto">
+        <tr>
+          <td>
+            Username
+          </td>
+          <td>: {{ username }}</td>
+        </tr>
+  
+        <tr>
+          <td>
+            Negara Asal
+          </td> 
+          <td>: {{ negara_asal }}</td>
+        </tr>
+  
+        <tr>
+          <td>
+            Password
+          </td>
+          <td>: {{ password }}</td>
+        </tr>
+  
+      </table>
+  </div>
+  {% endblock content %}

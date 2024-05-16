@@ -8,44 +8,20 @@ from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from utils.query import query
 from django.views.decorators.csrf import csrf_exempt
-
-import uuid
-
-
+from media_tayangan.views import tayangan_view
 from .models import UserProfile
+from django.contrib.auth.models import User
+
+from django.contrib import messages
+
 # Create your views here.
 def show_main(request):
     return render(request, 'main.html')
 
 def register(request):
-    print("masuk regist")
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            print("bisa buat akun")
-            user = form.save()
-            login(request, user)  # Automatically log in the user after registration
-            return redirect('main.html')
-        else:
-            print("gabisa buat akun")
-            messages.error(request, "Invalid registration credentials. Please try again.")
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
-
-# def login(request):
-#     print("masuk login")
-#     if request.method == 'POST':
-#         form = AuthenticationForm(data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('main.html')
-#         else:
-#             messages.error(request, "Invalid login credentials. Please try again.")
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, 'login.html', {'form': form})
+  if request.method != 'POST':
+    return render(request, 'register.html')
+  
 
 def login_view(request):
   return render(request, "login.html")
@@ -61,52 +37,7 @@ def check_session(request):
         return False
 
 
-# @csrf_exempt
-# def login(request):
-#     next = request.GET.get("next")
-#     if request.method != "POST":
-#         return login_view(request)
-
-#     username = ''
-#     password = ''
-
-#     if 'username' in request.session and 'password' in request.session:
-#         username = request.session['username']
-#         password = request.session['password']
-#     else:
-#         username = request.POST['username']
-#         password = request.POST['password']
-
-#     # Memeriksa username dan password di dalam tabel Pengguna
-#     print(username)
-#     print(password)
-    
-#     pengguna = authenticate_user("SELECT * FROM PENGGUNA WHERE username = %s AND password = %s", (username, password))
-#     print(pengguna)
-
-#     if not pengguna:
-#         context = {'fail': True}
-#         return render(request, "login.html", context)
-
-#     request.session["username"] = pengguna['username']
-#     request.session["password"] = pengguna['password']
-#     request.session["id_tayangan"] = pengguna['id_tayangan']
-#     request.session["negara_asal"] = pengguna['negara_asal']
-#     request.session.set_expiry(0)
-#     request.session.modified = True
-
-#     if next and next != "None":
-#         return redirect(next)
-#     else:
-#         # redirect to dashboard
-#         if pengguna['negara_asal'] == 'Indonesia':
-#             return redirect('/indonesia')
-#         elif pengguna['negara_asal'] == 'Inggris':
-#             return redirect('/inggris')
-#         else:
-#             return redirect('/global')
-
-
+  
 def is_authenticated(request):
     try:
         request.session["username"]
@@ -114,29 +45,95 @@ def is_authenticated(request):
     except KeyError:
         return False
 
-
-
-
+def get_session_data(request):
+    if not is_authenticated(request):
+        return {}
+    try:
+        return {"username": request.session["username"]}
+    except:
+        return {}
+    
 @csrf_exempt
 def login(request):
     next = request.GET.get("next")
     if is_authenticated(request):
-        return redirect("main.html")
+        return redirect('media_tayangan:tayangan_view')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        # Memeriksa username dan password di dalam tabel Pengguna
+
+        # Debugging: Print username yang diterima dari form login
+        print("Username yang diinput:", username)
+
+        # Verifikasi pengguna
         pengguna = query(f"""SELECT * FROM pengguna WHERE username='{username}' and password='{password}'""")
         flag = is_authenticated(request)
+
         if pengguna != [] and not flag:
             request.session["username"] = username
             request.session["password"] = password
-            # request.session["negara_asal"] = negara_asal
+            request.session['is_authenticated'] = True  # Setel status pengguna yang sudah masuk
             request.session.set_expiry(500)
             request.session.modified = True
-            if next != None and next != "None":
+
+            if next:
                 return redirect(next)
             else:
-                # Mengarahkan pengguna ke dashboard
-                return redirect("main.html")
-    return render(request, 'login.html')
+                # Redirect ke halaman tayangan_view jika berhasil login
+                return redirect('media_tayangan:tayangan_view')
+
+    return render(request, 'login.html', {'user': get_session_data(request)})
+
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        negara_asal = request.POST.get('negara_asal')
+
+        print("Username:", username)  # Debug: Cetak nilai username
+        print("Password:", password)  # Debug: Cetak nilai password
+        print("Negara Asal:", negara_asal)  # Debug: Cetak nilai negara_asal
+
+        # Cek apakah username sudah terdaftar
+        check_username = query(f"""SELECT * FROM PENGGUNA WHERE username = '{username}'""")
+
+        # Jika terjadi kesalahan saat query, redirect ke halaman login
+        if isinstance(check_username[0], str):
+            return redirect("/login")
+
+        # Jika tidak ada username yang cocok, tambahkan ke basis data
+        if not check_username:
+            try:
+                query(f"""INSERT INTO PENGGUNA VALUES ('{username}', '{password}', '{negara_asal}')""")
+                print("User berhasil ditambahkan ke basis data")  # Debug: Cetak jika user berhasil ditambahkan
+                return redirect('/login/')
+            except Exception as e:
+                print("Error:", e)  # Debug: Cetak pesan kesalahan saat eksekusi query
+                context = {'message': "Gagal mendaftarkan pengguna"}
+                return render(request, "register.html", context)
+        else:
+            print("Username sudah terdaftar")  # Debug: Cetak jika username sudah terdaftar
+            context = {'message': "Username sudah pernah terdaftar"}
+            return render(request, "register.html", context)
+    
+    context = {'message': ""}
+    return render(request, "register.html", context)
+
+
+
+
+def logout(request):
+    next = request.GET.get("next")
+
+    if not is_authenticated(request):
+        return redirect("/")
+
+    request.session.flush()
+    request.session.clear_expired()
+
+    if next != None and next != "None":
+        return redirect(next)
+    else:
+        return redirect("/")

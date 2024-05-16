@@ -20,20 +20,23 @@
                                 <div class="main-menu d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">    
-                                            {% if user.is_authenticated %}                                                                                      
-                                            <li><a href="{% url 'tayangan_view' %}">Daftar Tayangan</a></li>
-                                            <li><a href="{% url 'contributor_list' %}">Daftar Kontributor</a></li>
-                                            <li><a href="#">Kelola</a>
-                                                <ul class="submenu">
-                                                    <li><a href="#">Kelola Daftar Favorit</a></li>
-                                                    <li><a href="#">Kelola Daftar Unduhan</a></li>
-                                                    <li><a href="{% url 'subscription_page' %}">Kelola Langganan</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="button-header"><a href="#" class="btn btn3">Log out</a></li> 
-                                            {% else %}
-                                            <li class="active" ><a href="{% url 'trailer_view' %}">Trailer Tayangan</a></li>
+                                            {% if request.session.is_authenticated %}
+                                                <li><a href="{% url 'users:dashboard_pengguna' %}">Dashboard Pengguna</a></li>
+                                                <li><a href="{% url 'media_tayangan:tayangan_view' %}">Daftar Tayangan</a></li>
+                                                <li><a href="#">Daftar Kontributor</a></li>
+                                                <li><a href="#">Kelola</a>
+                                                    <ul class="submenu">
+                                                        <li><a href="#">Kelola Daftar Favorit</a></li>
+                                                        <li><a href="#">Kelola Daftar Unduhan</a></li>
+                                                        <li><a href="{% url 'users:subscription_page' %}">Kelola Langganan</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="button-header">Logged in as: {{ request.session.username }}</li>
+                                                <li class="button-header"><a href="{% url 'main:logout' %}" class="btn btn3">Log out</a></li> 
+                                            {% else %} 
+                                                <li class="active"><a href="{% url 'media_tayangan:trailer_view' %}">Trailer Tayangan</a></li>
                                             {% endif %}
+                                            
                                         </ul>
                                     </nav>
                                 </div>
@@ -54,7 +57,6 @@
 <style>
     .bg-color {
         background-color: #6274FF;
-
     }
 
     .main-header {
@@ -66,6 +68,12 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
     }
 
+    .button-header {
+        margin-left: 10px; 
+        color: #fff; 
+        font-size: 14px; 
+        font-weight: bold; 
+    }
 </style>
 
 
