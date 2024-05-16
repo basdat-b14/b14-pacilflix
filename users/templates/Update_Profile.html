@@ -9,7 +9,7 @@ PacilFlix | Manage Subscription
 {% include 'navbar.html' %}
 
 <div class="container m-5 text-center">
-    <div class="title indigo mb-5">Dashboard Pengguna</div>
+    <div class="title indigo mb-5">Edit Profile</div>
     
     <form method="POST" action="{% url 'users:update_profile' %}">
         {% csrf_token %}

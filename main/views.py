@@ -85,7 +85,7 @@ def login(request):
 
     return render(request, 'login.html', {'user': get_session_data(request)})
 
-
+@csrf_exempt
 def register(request):
     if request.method == "POST":
         username = request.POST.get('username')

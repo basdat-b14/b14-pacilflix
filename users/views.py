@@ -16,29 +16,57 @@ def buy_package(request, package_type):
     package_info = packages.get(package_type)
     return render(request, 'Beli_Paket.html', {'package': package_info})
 
+# def dashboard_pengguna(request):
+#     username = request.session.get('username')
+#     password = request.session.get('password')
+
+#     print(f"Username from session: {username}")  # Debug: Cetak username dari sesi
+#     print(f"Password from session: {password}")  # Debug: Cetak password dari sesi
+
+#     if not (username and password):
+#         return HttpResponse("Unauthorized", status=401)
+
+#     pengguna_data = query("SELECT * FROM pengguna WHERE username = %s", (username,))
+    
+
+
+#     print(f"Pengguna data: {pengguna_data}")  # Debug: Cetak data pengguna
+
+#     # Jika terjadi kesalahan saat query, redirect ke halaman login
+#     if isinstance(pengguna_data[0], str):
+#         return redirect("/login")
+
+#     if pengguna_data and check_password(password, pengguna_data[0].password):
+#         pengguna = pengguna_data[0]
+#         username = pengguna.username
+#         password = pengguna.password
+#         negara_asal = pengguna.negara_asal
+
+#         context = {
+#             "username": username,
+#             "password": password,
+#             "negara_asal": negara_asal,
+#         }
+#         return render(request, 'DashboardPengguna.html', context)  # Ganti redirect dengan render
+#     else:
+#         return HttpResponse("Unauthorized", status=401)
+
+
+# Create your views here.
 def dashboard_pengguna(request):
-    username = request.session.get('username')
-    password = request.session.get('password')
+    username = request.session["username"]
+    password = request.session["password"]
 
-    if not (username and password):
-        return HttpResponse("Unauthorized", status=401)
-
-    pengguna_data = query("SELECT * FROM pengguna WHERE username = %s", (username,))
-
-    if pengguna_data and check_password(password, pengguna_data[0].password):
-        pengguna = pengguna_data[0]
-        username = pengguna.username
-        password = pengguna.password
-        negara_asal = pengguna.negara_asal
-
-        context = {
-            "username": username,
-            "password": password,
-            "negara_asal": negara_asal,
-        }
-        return render(request, 'DashboardPengguna.html', context)
-    else:
-        return HttpResponse("Unauthorized", status=401)
+    # negara_asal = query("""SELECT negara_asal FROM PENGGUNA WHERE 
+    #                 username='{}' AND password='{}';
+    #                 """.format(username, password))[0]["negara_asal"]
+    
+    context = {
+        "username": username,
+        "password": password,
+        # "negara_asal": negara_asal
+    }
+    return render(request, 'Dashboard_Pengguna.html', context)
 
 @csrf_exempt
 def update_profile(request):
@@ -54,4 +82,4 @@ def update_profile(request):
         request.session["username"] = username
         request.session["password"] = password
 
-    return redirect('users:dashboardPengguna')
+    return redirect('users:dasboard_pengguna')

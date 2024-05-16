@@ -27,7 +27,7 @@ def map_cursor(cursor):
     nt_result = namedtuple("Result", [col[0] for col in desc])
     return [nt_result(*row) for row in cursor.fetchall()]
 
-def query(query_str: str):
+def query(query_str: str, params=None):
     hasil = []
     with connection.cursor() as cursor:
         try:
@@ -37,15 +37,9 @@ def query(query_str: str):
             connection.rollback()
 
         try:
-            cursor.execute(query_str)
+            cursor.execute(query_str, params)  # Pass params to the query
 
-            # if query_str.strip().lower().startswith("select"):
             hasil = map_cursor(cursor)
-            # else:
-            #     # Kalau ga error, return jumlah row yang termodifikasi oleh INSERT, UPDATE, DELETE
-            #     hasil = cursor.rowcount
-            #     # Buat commit di database
-            #     connection.commit()
 
         except Exception as e:
             hasil = [str(e)]  # Convert the error message to a list
