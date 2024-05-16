@@ -8,7 +8,6 @@ from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from utils.query import query
 from django.views.decorators.csrf import csrf_exempt
-
 import uuid
 
 
@@ -113,9 +112,6 @@ def is_authenticated(request):
         return True
     except KeyError:
         return False
-
-
-
 
 @csrf_exempt
 def login(request):
