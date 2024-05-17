@@ -1,1 +1,1 @@
-web: gunicorn 'b14-pacilflix.wsgi
+web: gunicorn b14-pacilflix.wsgi --log-file -
