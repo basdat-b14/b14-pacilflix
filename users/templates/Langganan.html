@@ -12,7 +12,7 @@ PacilFlix | Manage Subscription
     <div class="container">
         <h1 class="text-center mb-4">Halaman Kelola Langganan</h1>
         
-        <!-- Current Active Subscription -->
+        <!-- Active Subscription -->
         <div class="active-subscription" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-bottom: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Paket Langganan Aktif Anda</h2>
             <div class="table-responsive">
@@ -28,14 +28,20 @@ PacilFlix | Manage Subscription
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Standard</td>
-                            <td>80000</td>
-                            <td>1080p</td>
-                            <td>Tablet</td>
-                            <td>2024-04-29</td>
-                            <td>2024-04-30</td>
-                        </tr>
+                        {% if active_subscription %}
+                            <tr>
+                                <td>{{ active_subscription.nama_paket }}</td>
+                                <td>{{ active_subscription.total_pembayaran }}</td>
+                                <td>{{ active_subscription.resolusi_layar }}</td>
+                                <td>{{ active_subscription.dukungan_perangkat }}</td>
+                                <td>{{ active_subscription.start_date_time|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ active_subscription.end_date_time|date:"Y-m-d H:i:s" }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">No active subscriptions.</td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -56,28 +62,23 @@ PacilFlix | Manage Subscription
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Basic</td>
-                            <td>50000</td>
-                            <td>720p</td>
-                            <td>Mobile, Tablet</td>
-                            <td><a href="{% url 'buy_package' package_type='basic' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                        </tr>
-                        <tr>
-                            <td>Standard</td>
-                            <td>80000</td>
-                            <td>1080p</td>
-                            <td>Mobile, Tablet, Computer</td>
-                            <td><a href="{% url 'buy_package' package_type='standard' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                        </tr>
-                        <tr>
-                            <td>Premium</td>
-                            <td>120000</td>
-                            <td>4K</td>
-                            <td>Mobile, Tablet, Computer, TV</td>
-                            <td><a href="{% url 'buy_package' package_type='premium' %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a></td>
-                        </tr>
+                        {% for package in packages %}
+                            <tr>
+                                <td>{{ package.nama }}</td>
+                                <td>{{ package.harga }}</td>
+                                <td>{{ package.resolusi_layar }}</td>
+                                <td>{{ package.dukungan_perangkat }}</td>
+                                <td>
+                                    <a href="{% url 'users:buy_package' package_type=package.nama %}" class="btn btn-primary beli-btn" style="border-radius: 20px;">Beli</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No packages available.</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
+                    
                     
                 </table>
             </div>
@@ -99,15 +100,22 @@ PacilFlix | Manage Subscription
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Basic</td>
-                            <td>15/03/2018 8:35:59</td>
-                            <td>15/03/2018 12:05:23</td>
-                            <td>Kartu Kredit</td>
-                            <td>15/03/2018 12:05:58</td>
-                            <td>50000</td>
-                        </tr>
-                    </tbody>
+                        {% for sub in subscriptions %}
+                            <tr>
+                                <td>{{ sub.nama_paket }}</td>
+                                <td>{{ sub.start_date_time|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ sub.end_date_time|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ sub.metode_pembayaran}}</td>
+                                <td>{{ sub.timestamp_pembayaran|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ sub.total_pembayaran}}</td>
+
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6">No active subscriptions found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>                    
                 </table>
             </div>
         </div>

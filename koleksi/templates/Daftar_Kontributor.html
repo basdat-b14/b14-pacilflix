@@ -10,7 +10,6 @@ PacilFlix | Detailed Contributor List
 
 <!-- Main content area, adjusted to avoid navbar overlap -->
 <main class="py-4" style="background-color: #E0BBE4; padding-top: 5rem;">
-    <!-- Contributor List Section -->
     <section class="contributor-list">
         <div class="container">
             <div class="row justify-content-center">
@@ -19,53 +18,35 @@ PacilFlix | Detailed Contributor List
                         <h1 class="text-center mb-4">Daftar Kontributor</h1>
                         <div class="filter-buttons d-flex justify-content-center mb-3">
                             <button class="btn btn-sm filter-btn active" data-filter="all" onclick="filterContributors('all')">Semua</button>
-                            <button class="btn btn-sm filter-btn" data-filter="director" onclick="filterContributors('director')">Sutradara</button>
-                            <button class="btn btn-sm filter-btn" data-filter="actor" onclick="filterContributors('actor')">Pemain</button>
-                            <button class="btn btn-sm filter-btn" data-filter="screenwriter" onclick="filterContributors('screenwriter')">Penulis Skenario</button>
+                            <button class="btn btn-sm filter-btn" data-filter="sutradara" onclick="filterContributors('sutradara')">Sutradara</button>
+                            <button class="btn btn-sm filter-btn" data-filter="pemain" onclick="filterContributors('pemain')">Pemain</button>
+                            <button class="btn btn-sm filter-btn" data-filter="penulis skenario" onclick="filterContributors('penulis skenario')">Penulis Skenario</button>
                         </div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Judul Tayangan</th>
-                                        <th>Peran</th>
                                         <th>Nama</th>
+                                        <th>Peran</th>
                                         <th>Jenis Kelamin</th>
                                         <th>Kewarganegaraan</th>
                                     </tr>
                                 </thead>
-                                {% comment %} dummy data {% endcomment %}
                                 <tbody id="contributorTableBody">
-                                    <!-- Movie Title Row -->
-                                    <tr id="titleRow">
-                                        <td rowspan="3">Oppenheimer</td>
-                                        <td colspan="4"></td>
+                                    {% for contributor in contributors %}
+                                    <tr class="contributor" data-role="{{ contributor.roles|join:', '|lower }}">
+                                        <td>{{ contributor.nama }}</td>
+                                        <td>{{ contributor.roles|join:', ' }}</td>
+                                        <td>{{ contributor.jenis_kelamin }}</td>
+                                        <td>{{ contributor.kewarganegaraan }}</td>
                                     </tr>
-                                    <!-- Contributor Rows -->
-                                    <tr class="contributor" data-role="director">
-                                        <td>Director</td>
-                                        <td>Christopher Nolan</td>
-                                        <td>Male</td>
-                                        <td>British</td>
+                                    
+                                    
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4">No contributors found.</td>
                                     </tr>
-                                    <tr class="contributor" data-role="actor">
-                                        <td>Actor</td>
-                                        <td>
-                                            <ul>
-                                                <li>Cillian Murphy</li>
-                                                <li>Emily Blunt</li>
-                                                <li>Robert Downey Jr.</li>
-                                            </ul>
-                                        </td>
-                                        <td>Male</td>
-                                        <td>Irish</td>
-                                    </tr>
-                                    <tr class="contributor" data-role="screenwriter">
-                                        <td>Screenwriter</td>
-                                        <td>Jonathan Nolan</td>
-                                        <td>Male</td>
-                                        <td>American</td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -75,6 +56,7 @@ PacilFlix | Detailed Contributor List
         </div>
     </section>
 </main>
+
 
 <style>
     html, body {
@@ -139,29 +121,19 @@ PacilFlix | Detailed Contributor List
     }
 </style>
 
+
 <script>
     function filterContributors(type) {
         const rows = document.querySelectorAll('#contributorTableBody tr');
-        let visibleRowCount = 0;
-    
-        const titleRow = document.querySelector('#titleRow');
-        titleRow.style.display = '';
-    
         rows.forEach(row => {
-            if (row.id !== 'titleRow') {
-                const role = row.getAttribute('data-role');
-                if (type === 'all' || role === type) {
-                    row.style.display = '';
-                    visibleRowCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            }
+            // Ensure the roles are compared in lower case
+            const roles = row.getAttribute('data-role').split(',').map(role => role.trim());
+            // Log the roles to the console for debugging
+            console.log('Roles for this row:', roles);
+            row.style.display = (type === 'all' || roles.includes(type)) ? '' : 'none';
         });
-    
-        const titleCell = titleRow.querySelector('td:first-child');
-        titleCell.rowSpan = visibleRowCount + 1; 
-    
+
+        // Update button states to reflect the active filter
         const buttons = document.querySelectorAll('.filter-btn');
         buttons.forEach(button => {
             if (button.getAttribute('data-filter') === type) {
@@ -171,8 +143,11 @@ PacilFlix | Detailed Contributor List
             }
         });
     }
-    
+
+    // Initialize the filter to show all contributors
     filterContributors('all');
 </script>
+
+
 
 {% endblock %}
