@@ -12,13 +12,12 @@ from utils.query import query
 from psycopg2.extras import RealDictCursor
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from media_tayangan.views import tayangan_view
-def show_main(request):
-    return render(request, 'main.html')
+import json
 
-def register(request):
-  if request.method != 'POST':
-    return render(request, 'register.html')
-  
+
+
+def show_main(request):
+    return render(request, 'main.html')  
 
 def login_view(request):
     if request.method == 'POST':
@@ -31,6 +30,11 @@ def login_view(request):
         # stage awal
         return render(request, "login.html")
     
+def register(request):
+  if request.method != 'POST':
+    return render(request, 'register.html')
+   
+
 def check_session(request):
     '''Check apakah info user masih ada di session atau belum'''
     try:
@@ -95,37 +99,49 @@ def logout(request):
     else:
         return redirect("/")
 
+def get_existing_usernames():
+    query = "SELECT username FROM PENGGUNA;"
+    results, success = execute_query(query)
+    if success:
+        return [pengguna['username'] for pengguna in results]
+    return []
+
 @csrf_exempt
 def register(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         negara_asal = request.POST.get('negara_asal')
-        messages_list = []
 
-        if not username or not password or not negara_asal:
-            messages_list.append('Masukkan semua data yang diperlukan.')
-        elif len(username) < 5 or len(password) < 8:
-            messages_list.append('Username minimal harus 5 karakter dan password minimal 8 karakter.')
-    
-        if messages_list:
-            return render(request, 'register.html', {'messages': messages_list})
-        
-        hashed_password = make_password(password)
+        print("Username:", username)  # Debug: Print the value of username
+        print("Password:", password)  # Debug: Print the value of password
+        print("Negara Asal:", negara_asal)  # Debug: Print the value of negara_asal
+
         try:
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                SET search_path to PacilFlix; 
-                INSERT INTO pengguna (username, password, negara_asal) VALUES (%s, %s, %s)""",
-                               [username, hashed_password, negara_asal])
-                
+            # Check if the username already exists
+            query = f"""SELECT * FROM "PENGGUNA" WHERE username = %s LIMIT 1"""
+            user, success = execute_query(query, (username,))
+            
+            if success and user:
+                print("Username sudah terdaftar")  # Debug: Print if username already registered
+                context = {'message': "Username sudah pernah terdaftar"}
+                return render(request, "register.html", context)
+
+            # Insert the new user into the database
+            query = """INSERT INTO "PENGGUNA" (username, password, negara_asal) VALUES (%s, %s, %s)"""
+            execute_query(query, (username, password, negara_asal))
+            print("User berhasil ditambahkan ke basis data")  # Debug: Print if user successfully added
+            return redirect('/login/')
+
         except Exception as e:
-            messages_list.append('Username tersebut sudah ada, silahkan coba yang lagi!')
-            return render(request, 'register.html', {'messages': messages_list})
-        
-        return HttpResponseRedirect(reverse('login_view'))
-    
-    return render(request, 'register.html')
+            print("Error:", e)  # Debug: Print the error message if an exception occurs
+            context = {'message': "Gagal mendaftarkan pengguna"}
+            return render(request, "register.html", context)
+
+    context = {'message': ""}
+    return render(request, "register.html", context)
+
+
 
 # Utility function for executing queries
 def execute_query(query, params=None):
@@ -147,6 +163,7 @@ def execute_query(query, params=None):
     finally:
         connection.close()
 
+
 def get_connection():
     try:
         connection = psycopg2.connect(
@@ -158,8 +175,9 @@ def get_connection():
         )
         return connection
     except psycopg2.Error as error:
-        print("Error while connecting to PostgreSQL", error)
+        print(f"Error while connecting to PostgreSQL: {error}")
         return None
+
 
 def is_authenticated(request):
     return request.session.get("is_authenticated", False)
