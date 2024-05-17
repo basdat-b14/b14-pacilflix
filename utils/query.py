@@ -38,17 +38,26 @@ def query(query_str: str):
 
         try:
             cursor.execute(query_str)
-
-            # if query_str.strip().lower().startswith("select"):
             hasil = map_cursor(cursor)
-            # else:
-            #     # Kalau ga error, return jumlah row yang termodifikasi oleh INSERT, UPDATE, DELETE
-            #     hasil = cursor.rowcount
-            #     # Buat commit di database
-            #     connection.commit()
 
         except Exception as e:
             hasil = [str(e)]  # Convert the error message to a list
             connection.rollback()
 
     return hasil
+
+def query_insert(query_str: str):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SET SEARCH_PATH TO PacilFlix")
+        except Exception as e:
+            connection.rollback()
+            raise e
+
+        try:
+            cursor.execute(query_str)
+            connection.commit()
+            return True
+        except Exception as e:
+            connection.rollback()
+            raise e
