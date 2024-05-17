@@ -21,7 +21,6 @@
                                     <nav>
                                         <ul id="navigation">    
                                             {% if request.session.is_authenticated %}
-                                                <li><a href="{% url 'users:dashboard_pengguna' %}">Dashboard Pengguna</a></li>
                                                 <li><a href="{% url 'media_tayangan:tayangan_view' %}">Daftar Tayangan</a></li>
                                                 <li><a href="#">Daftar Kontributor</a></li>
                                                 <li><a href="#">Kelola</a>
@@ -75,5 +74,4 @@
         font-weight: bold; 
     }
 </style>
-
 

@@ -16,42 +16,36 @@ def buy_package(request, package_type):
     package_info = packages.get(package_type)
     return render(request, 'Beli_Paket.html', {'package': package_info})
 
-def dashboard_pengguna(request):
-    username = request.session.get('username')
-    password = request.session.get('password')
 
-    if not (username and password):
-        return HttpResponse("Unauthorized", status=401)
 
-    pengguna_data = query("SELECT * FROM pengguna WHERE username = %s", (username,))
+# # Create your views here.
+# def dashboard_pengguna(request):
+#     username = request.session["username"]
+#     password = request.session["password"]
 
-    if pengguna_data and check_password(password, pengguna_data[0].password):
-        pengguna = pengguna_data[0]
-        username = pengguna.username
-        password = pengguna.password
-        negara_asal = pengguna.negara_asal
+#     # negara_asal = query("""SELECT negara_asal FROM PENGGUNA WHERE 
+#     #                 username='{}' AND password='{}';
+#     #                 """.format(username, password))[0]["negara_asal"]
+    
+#     context = {
+#         "username": username,
+#         "password": password,
+#         # "negara_asal": negara_asal
+#     }
+#     return render(request, 'Dashboard_Pengguna.html', context)
 
-        context = {
-            "username": username,
-            "password": password,
-            "negara_asal": negara_asal,
-        }
-        return render(request, 'DashboardPengguna.html', context)
-    else:
-        return HttpResponse("Unauthorized", status=401)
+# @csrf_exempt
+# def update_profile(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = make_password(request.POST.get('password'))
+#         negara_asal = request.POST.get('negara_asal')
 
-@csrf_exempt
-def update_profile(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = make_password(request.POST.get('password'))
-        negara_asal = request.POST.get('negara_asal')
+#         # Update data pengguna di database
+#         query(f"""UPDATE pengguna SET username=%s, password=%s, negara_asal=%s WHERE username=%s""", (username, password, negara_asal, request.session["username"]))
 
-        # Update data pengguna di database
-        query(f"""UPDATE pengguna SET username=%s, password=%s, negara_asal=%s WHERE username=%s""", (username, password, negara_asal, request.session["username"]))
+#         # Update data pengguna di sesi
+#         request.session["username"] = username
+#         request.session["password"] = password
 
-        # Update data pengguna di sesi
-        request.session["username"] = username
-        request.session["password"] = password
-
-    return redirect('users:dashboardPengguna')
+#     return redirect('users:dasboard_pengguna')

@@ -9,7 +9,7 @@ urlpatterns = [
     path('cari-trailer', cari_trailer, name='cari_trailer'),
     path('tayangan', tayangan_view, name='tayangan_view'),
     path('cari-tayangan', cari_tayangan, name='cari_tayangan'),
-    path('series', series_view, name='series_view'),
-    path('film', film_view, name='film_view'),
+    path('series/<str:judul>/', series_view, name='series_view'),
+    path('film/<str:judul>/', film_view, name='film_view'),
     path('episode', episode_view, name='episode_view'),
 ]
