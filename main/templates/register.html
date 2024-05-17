@@ -6,9 +6,7 @@
 
 {% block content %}
    
-   
 {% load static %} 
-
 
 {% include 'preloader.html' %}
 <!-- Navbar code goes here -->
@@ -72,8 +70,8 @@
             </div>
     
             <div class="form-input">
-                <label for="country">Negara Asal</label>
-                <input type="text" id="country" name="country" placeholder="Masukkan Negara Asal" required>
+                <label for="negara_asal">Negara Asal</label>
+                <input type="text" id="negara_asal" name="negara_asal" placeholder="Masukkan Negara Asal" required>
             </div>
             
             <div class="form-input pt-30">
@@ -90,6 +88,7 @@
             var isValid = true;
             var username = document.getElementById('username');
             var password = document.getElementById('password');
+            var negara_asal = document.getElementById('negara_asal');
             var errorUsername = username.nextElementSibling;
             var errorPassword = password.nextElementSibling;
 
@@ -107,6 +106,14 @@
                 isValid = false;
             } else {
                 errorPassword.style.display = 'none';
+            }
+
+            // Validasi negara_asal
+            if (!negara_asal.value.trim()) {
+                negara_asal.nextElementSibling.style.display = 'block';
+                isValid = false;
+            } else {
+                negara_asal.nextElementSibling.style.display = 'none';
             }
 
             if (!isValid) {
