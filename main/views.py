@@ -9,9 +9,7 @@ from django.contrib.auth.hashers import make_password, check_password
 import psycopg2
 from utils.query import query 
 from psycopg2.extras import RealDictCursor
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from media_tayangan.views import tayangan_view
-import json
 
 
 

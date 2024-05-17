@@ -1,15 +1,10 @@
 import psycopg2
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import redirect, render
 
 from main.views import execute_query
-from django.http import HttpResponseForbidden
 
 
 
-# Create your views here.
-def contributor_list_view(request):
-    return render(request, 'Daftar_Kontributor.html')
 
 def daftar_unduhan_view(request): 
     return render(request, 'Daftar_Unduhan.html')
@@ -53,8 +48,8 @@ def daftar_favorit_view(request):
 
 
 def contributors_list(request):
-    if not request.session.get('is_authenticated', False):
-        return HttpResponseForbidden('You must be logged in to access this page')
+    if not request.session.get('is_authenticated'):
+        return redirect('main:login_view')  # Redirect ke login kalo engga authenticated
 
     query = """
         SELECT c.nama, c.jenis_kelamin, c.kewarganegaraan, 
