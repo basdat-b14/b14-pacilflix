@@ -16,14 +16,13 @@ def register(request):
 
 def login_view(request):
     if request.method == 'POST':
-        # Handle POST request for logging in
         response = login(request)
         if response.status_code == 200:
-            return redirect(reverse('main:show_main'))  # Redirect to main.html upon successful login
+            return redirect(reverse('main:show_main')) # login sukses
         else:
-            return render(request, "login.html")  # Stay on login.html if login fails
+            return render(request, "login.html")  # login gagal
     else:
-        # Handle GET request for showing the login page
+        # stage awal
         return render(request, "login.html")
 
 
@@ -67,7 +66,6 @@ def login(request):
         username = data.get('username')
         password = data.get('password')
         
-        # Fetch user from database
         query = f"""SELECT * FROM "PENGGUNA" WHERE username = '{username}' LIMIT 1"""
         user, success = execute_query(query)
         print (user)
@@ -80,7 +78,7 @@ def login(request):
         
         # Log the user in using Django's session framework
         request.session['username'] = username  # Store username in session
-        request.session['is_authenticated'] = True  # Mark the user as authenticated
+        request.session['is_authenticated'] = True 
         return JsonResponse({'success': 'User successfully logged in'}, status=200)
     
     except Exception as e:
@@ -92,7 +90,5 @@ def logout_view(request):
     request.session['is_authenticated'] = False  
     request.session.flush()
     
-    # After logging out, you can redirect the user to the login page or any other page.
-    # return JsonResponse({'success': 'Successfully logged out'}, status=200)
     return redirect(reverse('main:show_main'))
 
