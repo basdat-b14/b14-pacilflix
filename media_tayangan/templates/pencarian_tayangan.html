@@ -20,6 +20,14 @@ PacilFlix | Daftar Tayangan
         border-radius: 5px;
         border: none;
     }
+    .btn-custom-disable {
+        background-color: #8a8991;
+        color: rgb(255, 255, 255);
+        padding: 8px 5px;
+        font-size: 10.85px;
+        border-radius: 5px;
+        border: none;
+    }
 </style>
 
 <main class="py-4" style="padding-top: 4rem;">
@@ -37,7 +45,7 @@ PacilFlix | Daftar Tayangan
                             <i class="fas fa-search" style="color: rgb(0, 0, 0);"></i>
                         </button>
                     </div>
-                </form> 
+                </form>   
 
                 <div class="table-responsive p-3 text-center">
                     <table class="table table-hover" style="font-size: 80%;">
@@ -58,7 +66,7 @@ PacilFlix | Daftar Tayangan
                                 <td>{{ tayangan.sinopsis_trailer }}</td>
                                 <td>{{ tayangan.url_video_trailer }}</td>
                                 <td>{{ tayangan.release_date_trailer }}</td>
-                                <td>
+                                <!-- <td>
                                     <div class="d-flex align-items-center justify-content-center">
                                         {% if tayangan.type == 'film' %}
                                             <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
@@ -66,20 +74,20 @@ PacilFlix | Daftar Tayangan
                                             <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
                                         {% endif %}
                                     </div>
-                                </td>
-                                <!-- <td>
+                                </td> -->
+                                <td>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        {% if check_package.is_active == 1 %}
+                                        {% if check_package.0.is_active == 1 %}
                                             {% if tayangan.type == 'film' %}
-                                                <a href="{% url 'film_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
                                             {% elif tayangan.type == 'series' %}
-                                                <a href="{% url 'series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
                                             {% endif %}
                                         {% else %}
-                                            <a href="#" class="btn-custom disabled" aria-disabled="true">See more</a>
+                                            <a href="#" class="btn-custom-disable" aria-disabled="true">See more</a>
                                         {% endif %}
                                     </div>
-                                </td> -->
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
