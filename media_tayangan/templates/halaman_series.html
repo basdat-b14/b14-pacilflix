@@ -83,7 +83,7 @@ PacilFlix | Halaman Series
                 <h4 class="pl-5 pb-1"><b>Episode:</b></h4>
                 <div class="d-flex justify-content-start pl-5">
                     {% for episode in episode_list %}
-                        <a href="{% url 'episode_view' episode %}" class="custom-btn-ep mr-2">
+                        <a href="{% url 'media_tayangan:episode_view' episode %}" class="custom-btn-ep mr-2">
                             <i class="fas fa-play mr-3"></i>{{ episode }}
                         </a>
                     {% endfor %}
@@ -129,7 +129,7 @@ PacilFlix | Halaman Series
 
                 <div class="row pl-5 pb-2">
                     <div class="col-md-6">
-                        <form method="post" action="{% url 'ulasan' %}">
+                        <form method="post" action="{% url 'media_tayangan:ulasan' %}">
                             {% csrf_token %}
                             <input type="hidden" name="judul" value="{{ series_data.0.judul }}">
                             <div class="form-group">

@@ -16,7 +16,7 @@ PacilFlix | Trailer Tayangan
                     <h1>HASIL PENCARIAN</h1>
                 </div>
 
-                <form action="{% url 'cari_trailer' %}" method="GET">
+                <form action="{% url 'media_tayangan:cari_trailer' %}" method="GET">
                     <div class="input-group rounded m-3 p-3">
                         <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
                         <button type="submit" class="input-group-text border-0" id="search-addon">

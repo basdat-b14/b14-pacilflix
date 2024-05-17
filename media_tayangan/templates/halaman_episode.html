@@ -42,7 +42,7 @@ PacilFlix | Halaman Episode
                 <h4 class="pl-5 pb-2"><b>Sub Judul:</b> {{ episode_data.0.sub_judul }}</h4>
 
                 {% if film_data.0.status == 'Released' %}
-                <form method="post" action="{% url 'save_progress_series' %}">
+                <form method="post" action="{% url 'media_tayangan:save_progress_series' %}">
                     {% csrf_token %}
                     <input type="hidden" name="judul" value="{{ episode_data.0.sub_judul }}">
                     <div class="pl-5 pb-5 pt-3" style="display: flex; justify-content: center;">
@@ -57,7 +57,7 @@ PacilFlix | Halaman Episode
                 <h4 class="pl-5 pb-1"><b>Episode Lainnya:</b></h4>
                 <div class="d-flex justify-content-start pl-5 pb-5">
                     {% for episode in other_episode_list %}
-                        <a href="{% url 'episode_view' episode %}" class="custom-btn-ep mr-2">
+                        <a href="{% url 'media_tayangan:episode_view' episode %}" class="custom-btn-ep mr-2">
                             <i class="fas fa-play mr-3"></i>{{ episode }}
                         </a>
                     {% endfor %}

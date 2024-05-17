@@ -78,7 +78,7 @@ PacilFlix | Halaman Film
                         <div class="pl-5 pb-5 pt-3" style="display: flex; justify-content: center;">
                             <input type="range" class="form-range" min="0" max="100" id="progress-slider" name="progress" value="0" style="width: 100%;">
                         </div>
-                        <button type="submit" formaction="{% url 'save_progress_film' %}" class="custom-btn mr-2" name="submit_nonton"><i class="fas fa-play mr-3"></i>Tonton</button>
+                        <button type="submit" formaction="{% url 'media_tayangan:save_progress_film' %}" class="custom-btn mr-2" name="submit_nonton"><i class="fas fa-play mr-3"></i>Tonton</button>
                         <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
                         <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
                     {% else %}
@@ -137,7 +137,7 @@ PacilFlix | Halaman Film
                                 <h4>Rating film</h4>
                                 <input type="number" class="form-control" name="rating" id="rating" step="0.1" min="1" max="5">
                             </div>
-                            <button type="submit" formaction="{% url 'ulasan' %}" class="custom-btn">Submit</button>
+                            <button type="submit" formaction="{% url 'media_tayangan:ulasan' %}" class="custom-btn">Submit</button>
                         </form>
                     </div>
                 </div>
