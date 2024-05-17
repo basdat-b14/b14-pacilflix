@@ -67,6 +67,19 @@ PacilFlix | Daftar Tayangan
                                         {% endif %}
                                     </div>
                                 </td>
+                                <!-- <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        {% if check_package.is_active == 1 %}
+                                            {% if tayangan.type == 'film' %}
+                                                <a href="{% url 'film_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                            {% elif tayangan.type == 'series' %}
+                                                <a href="{% url 'series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="#" class="btn-custom disabled" aria-disabled="true">See more</a>
+                                        {% endif %}
+                                    </div>
+                                </td> -->
                             </tr>
                             {% endfor %}
                         </tbody>

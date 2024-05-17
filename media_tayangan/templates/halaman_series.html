@@ -79,14 +79,14 @@ PacilFlix | Halaman Series
                     <h1>HALAMAN SERIES</h1>
                 </div>
 
-                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> Squid Game</h4>
+                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> {{ series_data.0.judul }}</h4>
                 <h4 class="pl-5 pb-1"><b>Episode:</b></h4>
                 <div class="d-flex justify-content-start pl-5">
-                    <a href="{% url 'episode_view' %}" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 1</a>
-                    <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 2</button>
-                    <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 3</button>
-                    <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 4</button>
-                    <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 5</button>
+                    {% for episode in episode_list %}
+                        <a href="{% url 'episode_view' episode %}" class="custom-btn-ep mr-2">
+                            <i class="fas fa-play mr-3"></i>{{ episode }}
+                        </a>
+                    {% endfor %}
                 </div>
 
                 <div class="d-flex justify-content-start pl-5 pb-5 pt-3">
@@ -94,34 +94,28 @@ PacilFlix | Halaman Series
                     <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
                 </div>
 
-                <h4 class="pl-5 pb-2"><b>Total View:</b> 60000</h4>
-                <h4 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> 4.9</h4>
-                <h4 class="pl-5 pb-2"><b>Sinopsis:</b> Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</h4>
-                <h4 class="pl-5 pb-2">
-                    <b>Genre:</b>
-                    <ul>
-                        <li>- Horror</li>
-                        <li>- Thriller</li>
-                        <li>- Dystopia</li>
-                    </ul>
-                </h4>
-                <h4 class="pl-5 pb-2"><b>Asal Negara:</b> Korea Selatan</h4>
+                <h4 class="pl-5 pb-2"><b>Total View:</b> {{ series_data.0.total_view }}</h4>
+                <h4 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> {{ series_data.0.rating }}</h4>
+                <h4 class="pl-5 pb-2"><b>Sinopsis:</b> {{ series_data.0.sinopsis }}</h4>
+                <h4 class="pl-5 pb-2"><b>Genre:</b> {{ series_data.0.genre }}</h4>
+                <h4 class="pl-5 pb-2"><b>Asal Negara:</b> {{ series_data.0.asal_negara }}</h4>
                 <h4 class="pl-5 pb-2">
                     <b>Pemain:</b>
                     <ul>
-                        <li>- Jung Ho-yeon</li>
-                        <li>- Anupam Tripathi</li>
-                        <li>- Lee Jung-jae</li>
+                        {% for pemain in pemain_list %}
+                            <li>- {{ pemain }}</li>
+                        {% endfor %}
                     </ul>
                 </h4>
                 <h4 class="pl-5 pb-2">
                     <b>Penulis Skenario:</b>
                     <ul>
-                        <li>- Hwang Dong-hyuk</li>
-                        <li>- O Yeong-su</li>
+                        {% for penulis in penulis_list %}
+                            <li>- {{ penulis }}</li>
+                        {% endfor %}
                     </ul>
                 </h4>
-                <h4 class="pl-5 pb-2"><b>Sutradara:</b> Hwang Dong-hyuk</h4>
+                <h4 class="pl-5 pb-2"><b>Sutradara:</b> {{ series_data.0.sutradara }}</h4>
             </div>
 
             <div class="shadow pt-5 pr-5 mb-5 bg-white rounded">
@@ -135,14 +129,16 @@ PacilFlix | Halaman Series
 
                 <div class="row pl-5 pb-2">
                     <div class="col-md-6">
-                        <form>
+                        <form method="post" action="{% url 'ulasan' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="judul" value="{{ series_data.0.judul }}">
                             <div class="form-group">
                                 <h4>Tuliskan deskripsi ulasan</h4>
-                                <textarea class="form-control" id="reviewDescription" rows="3"></textarea>
+                                <textarea class="form-control" name="deskripsi" id="reviewDescription" rows="2"></textarea>
                             </div>
                             <div class="form-group">
-                                <h4>Rating film</h4>
-                                <input type="number" class="form-control" id="rating" step="0.1" min="1" max="5">
+                                <h4>Rating series</h4>
+                                <input type="number" class="form-control" name="rating" id="rating" step="0.1" min="1" max="5">
                             </div>
                             <button type="submit" class="custom-btn">Submit</button>
                         </form>
@@ -154,33 +150,17 @@ PacilFlix | Halaman Series
                 </div>
 
                 <div class="row pl-5 pt-3">
+                    {% for ulasan in review_data %}
                     <div class="col-md-6 mb-5">
                         <div class="card" style="width: 100%;">
                             <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                                <h4 class="card-title">{{ ulasan.username }}</h4>
+                                <h4 class="card-subtitle mb-2 text-muted">Rating: {{ ulasan.rating }}</h4>
+                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">{{ ulasan.deskripsi }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-5">
-                        <div class="card" style="width: 100%;">
-                            <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-5">
-                        <div class="card" style="width: 100%;">
-                            <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

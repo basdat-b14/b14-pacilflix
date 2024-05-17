@@ -69,43 +69,50 @@ PacilFlix | Halaman Film
                     <h1>HALAMAN FILM</h1>
                 </div>
 
-                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> Oppenheimer</h4>
-                <div class="d-flex justify-content-start pl-5 pb-5">
-                    <button type="button" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton</button>
-                    <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
-                    <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
+                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> {{ film_data.0.judul }}</h4>
+                {% if film_data.0.status == 'Released' %}
+                <div class="d-flex justify-content pl-5 pb-5">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="judul" value="{{ film_data.0.judul }}">
+                        <div class="pl-5 pb-5 pt-3" style="display: flex; justify-content: center;">
+                            <input type="range" class="form-range" min="0" max="100" id="progress-slider" name="progress" value="0" style="width: 100%;">
+                        </div>
+                        <button type="submit" formaction="{% url 'save_progress_film' %}" class="custom-btn mr-2" name="submit_nonton"><i class="fas fa-play mr-3"></i>Tonton</button>
+                        <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
+                        <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
+                    {% else %}
+                        <button type="button" class="custom-btn mr-2"><i class="fas fa-download mr-3"></i>Unduh</button>
+                        <button type="button" class="custom-btn"><i class="fas fa-star mr-3"></i>Tambah ke Favorit</button>
+                    </form>
+                    {% endif %}
                 </div>
 
-                <h4 class="pl-5 pb-2"><b>Total View:</b> 100000</h4>
-                <h4 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> 4.9</h4>
-                <h4 class="pl-5 pb-2"><b>Sinopsis:</b> Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</h4>
-                <h4 class="pl-5 pb-2"><b>Durasi Film:</b> 169 menit</h4>
-                <h4 class="pl-5 pb-2"><b>Tanggal Rilis Film:</b> 2023-07-19</h4>
-                <h4 class="pl-5 pb-2"><b>URL Film:</b> https://pacilflix.com/watch/30123456</h4>
-                <h4 class="pl-5 pb-2">
-                    <b>Genre:</b>
-                    <ul>
-                        <li>- Historical drama</li>
-                        <li>- Thriller</li>
-                    </ul>
-                </h4>
-                <h4 class="pl-5 pb-2"><b>Asal Negara:</b> Amerika Serikat</h4>
+                <h4 class="pl-5 pb-2"><b>Total View:</b> {{ film_data.0.total_view }}</h4>
+                <h4 class="pl-5 pb-2"><b>Rating Rata-Rata:</b> {{ film_data.0.rating }}</h4>
+                <h4 class="pl-5 pb-2"><b>Sinopsis:</b> {{ film_data.0.sinopsis }}</h4>
+                <h4 class="pl-5 pb-2"><b>Durasi Film:</b> {{ film_data.0.durasi_film }} menit</h4>
+                <h4 class="pl-5 pb-2"><b>Tanggal Rilis Film:</b> {{ film_data.0.release_date_film }}</h4>
+                <h4 class="pl-5 pb-2"><b>URL Film:</b> {{ film_data.0.url_video_film }}</h4>
+                <h4 class="pl-5 pb-2"><b>Genre:</b> {{ film_data.0.genre }}</h4>
+                <h4 class="pl-5 pb-2"><b>Asal Negara:</b> {{ film_data.0.asal_negara }}</h4>
                 <h4 class="pl-5 pb-2">
                     <b>Pemain:</b>
                     <ul>
-                        <li>- Cillian Murphy</li>
-                        <li>- Emily Blunt</li>
-                        <li>- Robert Downey Jr</li>
+                        {% for pemain in pemain_list %}
+                            <li>- {{ pemain }}</li>
+                        {% endfor %}
                     </ul>
                 </h4>
                 <h4 class="pl-5 pb-2">
                     <b>Penulis Skenario:</b>
                     <ul>
-                        <li>- Christopher Nolan</li>
-                        <li>- Kai Bird</li>
+                        {% for penulis in penulis_list %}
+                            <li>- {{ penulis }}</li>
+                        {% endfor %}
                     </ul>
                 </h4>
-                <h4 class="pl-5 pb-2"><b>Sutradara:</b> Christopher Nolan</h4>
+            <h4 class="pl-5 pb-2"><b>Sutradara:</b> {{ film_data.0.sutradara }}</h4>
             </div>
 
             <div class="shadow pt-5 pr-5 mb-5 bg-white rounded">
@@ -119,16 +126,18 @@ PacilFlix | Halaman Film
 
                 <div class="row pl-5 pb-2">
                     <div class="col-md-6">
-                        <form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="judul" value="{{ film_data.0.judul }}">
                             <div class="form-group">
                                 <h4>Tuliskan deskripsi ulasan</h4>
-                                <textarea class="form-control" id="reviewDescription" rows="3"></textarea>
+                                <textarea class="form-control" name="deskripsi" id="reviewDescription" rows="2"></textarea>
                             </div>
                             <div class="form-group">
                                 <h4>Rating film</h4>
-                                <input type="number" class="form-control" id="rating" step="0.1" min="1" max="5">
+                                <input type="number" class="form-control" name="rating" id="rating" step="0.1" min="1" max="5">
                             </div>
-                            <button type="submit" class="custom-btn">Submit</button>
+                            <button type="submit" formaction="{% url 'ulasan' %}" class="custom-btn">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -138,33 +147,17 @@ PacilFlix | Halaman Film
                 </div>
 
                 <div class="row pl-5 pt-3">
+                    {% for ulasan in review_data %}
                     <div class="col-md-6 mb-5">
                         <div class="card" style="width: 100%;">
                             <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
+                                <h4 class="card-title">{{ ulasan.username }}</h4>
+                                <h4 class="card-subtitle mb-2 text-muted">Rating: {{ ulasan.rating }}</h4>
+                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">{{ ulasan.deskripsi }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-5">
-                        <div class="card" style="width: 100%;">
-                            <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-5">
-                        <div class="card" style="width: 100%;">
-                            <div class="card-body">
-                                <h4 class="card-title">Username</h4>
-                                <h4 class="card-subtitle mb-2 text-muted">Rating: 4.5</h4>
-                                <p class="card-text" style="overflow-x: auto; font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia justo ut est eleifend, at elementum dolor ultrices.</p>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
