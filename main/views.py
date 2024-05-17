@@ -91,6 +91,7 @@ def logout(request):
     if not is_authenticated(request):
         return redirect("/")
 
+    request.session['is_authenticated'] = False
     request.session.flush()
     request.session.clear_expired()
 
@@ -129,9 +130,12 @@ def register(request):
 
             # Insert the new user into the database
             query = """INSERT INTO "PENGGUNA" (username, password, negara_asal) VALUES (%s, %s, %s)"""
-            execute_query(query, (username, password, negara_asal))
-            print("User berhasil ditambahkan ke basis data")  # Debug: Print if user successfully added
-            return redirect('/login/')
+            result, success = execute_query(query, (username, password, negara_asal))
+            if success:
+                print("User berhasil ditambahkan ke basis data")  # Debug: Print if user successfully added
+                return redirect('/login/')
+            else:
+                raise Exception(result)  # Raise an exception if the query execution was not successful
 
         except Exception as e:
             print("Error:", e)  # Debug: Print the error message if an exception occurs
@@ -140,7 +144,6 @@ def register(request):
 
     context = {'message': ""}
     return render(request, "register.html", context)
-
 
 
 # Utility function for executing queries
