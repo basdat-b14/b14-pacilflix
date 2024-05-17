@@ -7,7 +7,7 @@ def is_authenticated(request):
         return True
     except KeyError:
         return False
-    
+      
 def trailer_view(request):
     trailer_data = query(
         """WITH EpisodeDurations AS (

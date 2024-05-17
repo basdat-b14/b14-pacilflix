@@ -30,7 +30,7 @@ PacilFlix | Daftar Tayangan
                     <h1>HASIL PENCARIAN</h1>
                 </div>
 
-                <form action="{% url 'cari_tayangan' %}" method="GET">
+                <form action="{% url 'media_tayangan:cari_tayangan' %}" method="GET">
                     <div class="input-group rounded m-3 p-3">
                         <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
                         <button type="submit" class="input-group-text border-0" id="search-addon">
@@ -61,9 +61,9 @@ PacilFlix | Daftar Tayangan
                                 <td>
                                     <div class="d-flex align-items-center justify-content-center">
                                         {% if tayangan.type == 'film' %}
-                                            <a href="{% url 'film_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                            <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
                                         {% elif tayangan.type == 'series' %}
-                                            <a href="{% url 'series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                            <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
                                         {% endif %}
                                     </div>
                                 </td>

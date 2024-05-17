@@ -31,14 +31,12 @@ PacilFlix | Daftar Tayangan
                         <h1>DAFTAR TAYANGAN</h1>
                     </div>
 
-                    <form action="{% url 'cari_tayangan' %}" method="GET">
-                        <div class="input-group rounded m-3 p-3">
-                            <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
-                            <button type="submit" class="input-group-text border-0" id="search-addon">
-                                <i class="fas fa-search" style="color: rgb(0, 0, 0);"></i>
-                            </button>
-                        </div>
-                    </form> 
+                    <div class="input-group rounded m-3 p-3">
+                        <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                        <span class="input-group-text border-0" id="search-addon">
+                            <a href="{% url 'media_tayangan:cari_tayangan' %}"><i class="fas fa-search" style="color: rgb(0, 0, 0);"></i></a>
+                        </span>
+                    </div>
 
                     <div class="text-center pt-3">
                         <h3>10 Tayangan Terbaik Minggu Ini</h3>
@@ -77,9 +75,9 @@ PacilFlix | Daftar Tayangan
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
                                             {% if tayangan.type == 'film' %}
-                                                <a href="{% url 'film_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
                                             {% elif tayangan.type == 'series' %}
-                                                <a href="{% url 'series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
                                             {% endif %}
                                         </div>
                                     </td>
@@ -130,7 +128,7 @@ PacilFlix | Daftar Tayangan
                                         <td>{{ film.release_date_trailer }}</td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <a href="{% url 'film_view' film.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:film_view' film.judul %}" class="btn-custom">See more</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -169,7 +167,7 @@ PacilFlix | Daftar Tayangan
                                         <td>{{ series.release_date_trailer }}</td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <a href="{% url 'series_view' series.judul %}" class="btn-custom">See more</a>
+                                                <a href="{% url 'media_tayangan:series_view' series.judul %}" class="btn-custom">See more</a>
                                             </div>
                                         </td>
                                     </tr>

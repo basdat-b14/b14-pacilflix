@@ -1,6 +1,9 @@
 from django.urls import path
 from media_tayangan.views import *
 
+
+app_name = 'media_tayangan'
+
 urlpatterns = [
     path('trailer', trailer_view, name='trailer_view'),
     path('cari-trailer', cari_trailer, name='cari_trailer'),
