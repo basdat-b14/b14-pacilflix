@@ -59,7 +59,7 @@ PacilFlix | Tralier Tayangan
                             <tbody>
                                 {% for trailer in trailer_data %}
                                 <tr>
-                                    <th scope="row">{{ trailer.rank }}</th>
+                                    <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{ trailer.judul }}</td>
                                     <td>{{ trailer.sinopsis_trailer }}</td>
                                     <td>{{ trailer.url_video_trailer }}</td>
