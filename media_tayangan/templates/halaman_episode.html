@@ -38,25 +38,35 @@ PacilFlix | Halaman Episode
                 <h1>HALAMAN EPISODE</h1>
                 </div>
 
-                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> Squid Game</h4>
-                <h4 class="pl-5 pb-2"><b>Sub Judul:</b> Red Light, Green Light</h4>
+                <h4 class="pl-5 pt-5 pb-2"><b>Judul:</b> {{ episode_data.0.judul }}</h4>
+                <h4 class="pl-5 pb-2"><b>Sub Judul:</b> {{ episode_data.0.sub_judul }}</h4>
 
-                <div class="d-flex justify-content-start pl-5 pb-5">
-                <button type="button" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton Episode</button>
-                </div>
+                {% if film_data.0.status == 'Released' %}
+                <form method="post" action="{% url 'save_progress_series' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="judul" value="{{ episode_data.0.sub_judul }}">
+                    <div class="pl-5 pb-5 pt-3" style="display: flex; justify-content: center;">
+                        <input type="range" class="form-range" min="0" max="100" id="progress-slider" name="progress" value="0" style="width: 80%;">
+                    </div>
+                    <div class="d-flex justify-content-start pl-5 pb-5">
+                        <button type="submit" class="custom-btn mr-2"><i class="fas fa-play mr-3"></i>Tonton</button>
+                    </div>
+                </form>
+                {% endif %}
 
                 <h4 class="pl-5 pb-1"><b>Episode Lainnya:</b></h4>
                 <div class="d-flex justify-content-start pl-5 pb-5">
-                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 2</button>
-                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 3</button>
-                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 4</button>
-                <button type="button" class="custom-btn-ep mr-2"><i class="fas fa-play mr-3"></i>Episode 5</button>
+                    {% for episode in other_episode_list %}
+                        <a href="{% url 'episode_view' episode %}" class="custom-btn-ep mr-2">
+                            <i class="fas fa-play mr-3"></i>{{ episode }}
+                        </a>
+                    {% endfor %}
                 </div>
 
-                <h4 class="pl-5 pb-2"><b>Sinopsis Episode:</b> Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</h4>
-                <h4 class="pl-5 pb-2"><b>Durasi Episode:</b> 61 menit</h4>
-                <h4 class="pl-5 pb-2"><b>URL Episode:</b> https://pacilflix.com/watch/30123467</h4>
-                <h4 class="pl-5 pb-2"><b>Tanggal Rilis Episode:</b> 2021-09-17</h4>
+                <h4 class="pl-5 pb-2"><b>Sinopsis Episode:</b> {{ episode_data.0.sinopsis }}</h4>
+                <h4 class="pl-5 pb-2"><b>Durasi Episode:</b> {{ episode_data.0.durasi }} menit</h4>
+                <h4 class="pl-5 pb-2"><b>URL Episode:</b> {{ episode_data.0.url_video }}</h4>
+                <h4 class="pl-5 pb-2"><b>Tanggal Rilis Episode:</b> {{ episode_data.0.release_date }}</h4>
             </div>
         </div>
     </body>
