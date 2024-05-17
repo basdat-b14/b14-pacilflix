@@ -124,6 +124,12 @@ def register(request):
         password = request.POST.get('password')
         negara_asal = request.POST.get('negara_asal')
 
+
+        # Memeriksa apakah semua field sudah diisi
+        if not (username and password and negara_asal):
+            # Jika tidak, kembalikan response BadRequest
+            messages.error(request, 'Semua field harus diisi!')
+            return render(request, "register.html")
         try:
             # Check if the username already exists
             query = f"""SELECT * FROM "PENGGUNA" WHERE username = %s LIMIT 1"""
@@ -143,7 +149,6 @@ def register(request):
                 raise Exception(result)  # Raise an exception if the query execution was not successful
 
         except Exception as e:
-            print("Error:", e)  # Debug: Print the error message if an exception occurs
             messages.error(request, 'Gagal mendaftarkan pengguna, coba lagi!')
             return render(request, "register.html", {'message': 'Gagal mendaftarkan pengguna, coba lagi!'})
 
