@@ -1,8 +1,0 @@
-CurrencyConverter==0.17
-gunicorn==22.0.0
-packaging==24.0
-prettytable==3.4.1
-psycopg2==2.9.9
-python-decouple==3.8
-tabulate==0.8.10
-wcwidth==0.2.5
