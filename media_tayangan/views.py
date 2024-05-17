@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+
+from utils.query import query
 # Create your views here.
 def trailer_view(request):
     #TODO: haven't checked series count

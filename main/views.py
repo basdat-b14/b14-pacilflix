@@ -19,7 +19,12 @@ import json
 def show_main(request):
     return render(request, 'main.html')  
 
+
 def login_view(request):
+
+    if request.session.get('is_authenticated'):
+        return redirect(reverse('media_tayangan:tayangan_view'))
+    
     if request.method == 'POST':
         response = login(request)
         if response.status_code == 200:
@@ -62,6 +67,9 @@ def get_session_data(request):
 
 @csrf_exempt
 def login(request):
+    next = request.GET.get("next")
+    if request.method != "POST":
+        return login_view(request)
     try:
         data = request.POST
         username = data.get('username')
