@@ -20,9 +20,9 @@
                                 <div class="main-menu d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">    
-                                            {% if user.is_authenticated %}                                                                                      
+                                            {% if request.session.is_authenticated %}
                                             <li><a href="{% url 'tayangan_view' %}">Daftar Tayangan</a></li>
-                                            <li><a href="{% url 'contributor_list' %}">Daftar Kontributor</a></li>
+                                            <li><a href="{% url 'daftar_kontributor_page' %}">Daftar Kontributor</a></li>
                                             <li><a href="#">Kelola</a>
                                                 <ul class="submenu">
                                                     <li><a href="#">Kelola Daftar Favorit</a></li>
@@ -30,7 +30,12 @@
                                                     <li><a href="{% url 'subscription_page' %}">Kelola Langganan</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="button-header"><a href="#" class="btn btn3">Log out</a></li> 
+                                            <li class="button-header">
+                                                <form action="{% url 'main:logout' %}" method="post" style="all: unset;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn3">Log out</button>
+                                                </form>
+                                            </li>
                                             {% else %}
                                             <li class="active" ><a href="{% url 'trailer_view' %}">Trailer Tayangan</a></li>
                                             {% endif %}

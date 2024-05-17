@@ -1,142 +1,98 @@
-from django.shortcuts import render
-from django.contrib.auth.forms import  AuthenticationForm
-from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import logout
+from django.urls import reverse
 from django.http import JsonResponse
-from django.contrib.auth.forms import UserCreationForm
-from utils.query import query
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
-import uuid
 
-
-from .models import UserProfile
 # Create your views here.
 def show_main(request):
     return render(request, 'main.html')
 
 def register(request):
-    print("masuk regist")
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            print("bisa buat akun")
-            user = form.save()
-            login(request, user)  # Automatically log in the user after registration
-            return redirect('main.html')
-        else:
-            print("gabisa buat akun")
-            messages.error(request, "Invalid registration credentials. Please try again.")
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
-
-# def login(request):
-#     print("masuk login")
-#     if request.method == 'POST':
-#         form = AuthenticationForm(data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('main.html')
-#         else:
-#             messages.error(request, "Invalid login credentials. Please try again.")
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, 'login.html', {'form': form})
+    return ''
 
 def login_view(request):
-  return render(request, "login.html")
-
-
-def check_session(request):
-    '''Check apakah info user masih ada di session atau belum'''
-    try:
-        request.session["username"]
-        request.session["password"]
-        return True
-    except KeyError:
-        return False
-
-
-# @csrf_exempt
-# def login(request):
-#     next = request.GET.get("next")
-#     if request.method != "POST":
-#         return login_view(request)
-
-#     username = ''
-#     password = ''
-
-#     if 'username' in request.session and 'password' in request.session:
-#         username = request.session['username']
-#         password = request.session['password']
-#     else:
-#         username = request.POST['username']
-#         password = request.POST['password']
-
-#     # Memeriksa username dan password di dalam tabel Pengguna
-#     print(username)
-#     print(password)
-    
-#     pengguna = authenticate_user("SELECT * FROM PENGGUNA WHERE username = %s AND password = %s", (username, password))
-#     print(pengguna)
-
-#     if not pengguna:
-#         context = {'fail': True}
-#         return render(request, "login.html", context)
-
-#     request.session["username"] = pengguna['username']
-#     request.session["password"] = pengguna['password']
-#     request.session["id_tayangan"] = pengguna['id_tayangan']
-#     request.session["negara_asal"] = pengguna['negara_asal']
-#     request.session.set_expiry(0)
-#     request.session.modified = True
-
-#     if next and next != "None":
-#         return redirect(next)
-#     else:
-#         # redirect to dashboard
-#         if pengguna['negara_asal'] == 'Indonesia':
-#             return redirect('/indonesia')
-#         elif pengguna['negara_asal'] == 'Inggris':
-#             return redirect('/inggris')
-#         else:
-#             return redirect('/global')
-
-
-def is_authenticated(request):
-    try:
-        request.session["username"]
-        return True
-    except KeyError:
-        return False
-
-
-
-
-@csrf_exempt
-def login(request):
-    next = request.GET.get("next")
-    if is_authenticated(request):
-        return redirect("main.html")
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        # Memeriksa username dan password di dalam tabel Pengguna
-        pengguna = query(f"""SELECT * FROM pengguna WHERE username='{username}' and password='{password}'""")
-        flag = is_authenticated(request)
-        if pengguna != [] and not flag:
-            request.session["username"] = username
-            request.session["password"] = password
-            # request.session["negara_asal"] = negara_asal
-            request.session.set_expiry(500)
-            request.session.modified = True
-            if next != None and next != "None":
-                return redirect(next)
-            else:
-                # Mengarahkan pengguna ke dashboard
-                return redirect("main.html")
-    return render(request, 'login.html')
+        # Handle POST request for logging in
+        response = login(request)
+        if response.status_code == 200:
+            return redirect(reverse('main:show_main'))  # Redirect to main.html upon successful login
+        else:
+            return render(request, "login.html")  # Stay on login.html if login fails
+    else:
+        # Handle GET request for showing the login page
+        return render(request, "login.html")
+
+
+def get_connection():
+    try:
+        connection = psycopg2.connect(
+            dbname='postgres',
+            user='postgres.zdigjyodrdhsvdsdvuvo',
+            password='Pacilflixjayajayajaya',
+            host='aws-0-ap-southeast-1.pooler.supabase.com',
+            port='5432'
+        )
+        return connection
+    except psycopg2.Error as error:
+        print("Error while connecting to PostgreSQL", error)
+        return None
+
+def execute_query(query):
+    connection = get_connection()
+    if connection is None:
+        return {"error": "Connection to database failed"}, False
+    try:
+        with connection.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("""SET search_path TO "PacilFlix" """)
+            cursor.execute(query)
+            if query.strip().lower().startswith('select'):
+                results = cursor.fetchall()
+                return results, True
+            connection.commit()
+            return {"message": "Query executed successfully"}, True
+    except Exception as e:
+        connection.rollback()
+        return str(e), False
+    finally:
+        connection.close()
+
+@require_http_methods(["POST"])
+def login(request):
+    try:
+        data = request.POST
+        username = data.get('username')
+        password = data.get('password')
+        
+        # Fetch user from database
+        query = f"""SELECT * FROM "PENGGUNA" WHERE username = '{username}' LIMIT 1"""
+        user, success = execute_query(query)
+        print (user)
+        if not success or not user:
+            return JsonResponse({'error': 'Authentication failed'}, status=401)
+        
+        # Assuming password is plain text for example; use hashed passwords in production
+        if user[0]['password'] != password:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        
+        # Log the user in using Django's session framework
+        request.session['username'] = username  # Store username in session
+        request.session['is_authenticated'] = True  # Mark the user as authenticated
+        return JsonResponse({'success': 'User successfully logged in'}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+@require_http_methods(["POST"])
+def logout_view(request):
+    # This will clear the user's session and log them out.
+    request.session['is_authenticated'] = False  
+    request.session.flush()
+    
+    # After logging out, you can redirect the user to the login page or any other page.
+    # return JsonResponse({'success': 'Successfully logged out'}, status=200)
+    return redirect(reverse('main:show_main'))
+
