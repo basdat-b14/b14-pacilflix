@@ -71,10 +71,12 @@ def login(request):
         user, success = execute_query(query)
         print (user)
         if not success or not user:
+            messages.error(request, 'Username atau Password Anda Salah. Silahkan Coba lagi!')
             return JsonResponse({'error': 'Authentication failed'}, status=401)
         
         # Assuming password is plain text for example; use hashed passwords in production
         if user[0]['password'] != password:
+            messages.error(request, 'Username atau Password Anda Salah. Silahkan Coba lagi!')
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
         
         # Log the user in using Django's session framework
@@ -114,36 +116,30 @@ def register(request):
         password = request.POST.get('password')
         negara_asal = request.POST.get('negara_asal')
 
-        print("Username:", username)  # Debug: Print the value of username
-        print("Password:", password)  # Debug: Print the value of password
-        print("Negara Asal:", negara_asal)  # Debug: Print the value of negara_asal
-
         try:
             # Check if the username already exists
             query = f"""SELECT * FROM "PENGGUNA" WHERE username = %s LIMIT 1"""
             user, success = execute_query(query, (username,))
             
             if success and user:
-                print("Username sudah terdaftar")  # Debug: Print if username already registered
-                context = {'message': "Username sudah pernah terdaftar"}
-                return render(request, "register.html", context)
+                messages.error(request, 'Username sudah pernah terdaftar')
+                return render(request, "register.html")
 
             # Insert the new user into the database
             query = """INSERT INTO "PENGGUNA" (username, password, negara_asal) VALUES (%s, %s, %s)"""
             result, success = execute_query(query, (username, password, negara_asal))
             if success:
-                print("User berhasil ditambahkan ke basis data")  # Debug: Print if user successfully added
+                messages.success(request, 'Berhasil mendaftar!')
                 return redirect('/login/')
             else:
                 raise Exception(result)  # Raise an exception if the query execution was not successful
 
         except Exception as e:
             print("Error:", e)  # Debug: Print the error message if an exception occurs
-            context = {'message': "Gagal mendaftarkan pengguna"}
-            return render(request, "register.html", context)
+            messages.error(request, 'Gagal mendaftarkan pengguna, coba lagi!')
+            return render(request, "register.html", {'message': 'Gagal mendaftarkan pengguna, coba lagi!'})
 
-    context = {'message': ""}
-    return render(request, "register.html", context)
+    return render(request, "register.html", {'message': ""})
 
 
 # Utility function for executing queries
