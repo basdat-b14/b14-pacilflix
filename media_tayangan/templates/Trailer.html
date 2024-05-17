@@ -23,12 +23,14 @@ PacilFlix | Tralier Tayangan
                         <h1>DAFTAR TAYANGAN</h1>
                     </div>
 
-                    <div class="input-group rounded m-3 p-3">
-                        <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
-                        <span class="input-group-text border-0" id="search-addon">
-                            <a href="{% url 'media_tayangan:cari_trailer' %}"><i class="fas fa-search" style="color: rgb(0, 0, 0);"></i></a>
-                        </span>
-                    </div>
+                    <form action="{% url 'media_tayangan:cari_trailer' %}" method="GET">
+                        <div class="input-group rounded m-3 p-3">
+                            <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                            <button type="submit" class="input-group-text border-0" id="search-addon">
+                                <i class="fas fa-search" style="color: rgb(0, 0, 0);"></i>
+                            </button>
+                        </div>
+                    </form>                    
 
                     <div class="text-center pt-3">
                         <h3>10 Tayangan Terbaik Minggu Ini</h3>
@@ -38,10 +40,6 @@ PacilFlix | Tralier Tayangan
                         <div class="form-check form-check-inline" style="font-size: 75%;">
                             <input class="form-check-input" type="radio" name="top10" id="global" checked>
                             <label class="form-check-label" for="global">Top 10 Global</label>
-                        </div>
-                        <div class="form-check form-check-inline" style="font-size: 75%;">
-                            <input class="form-check-input" type="radio" name="top10" id="country">
-                            <label class="form-check-label" for="country">Top 10 di Negara Pengguna</label>
                         </div>
                     </div>
 
@@ -59,38 +57,16 @@ PacilFlix | Tralier Tayangan
                             </thead>
 
                             <tbody>
+                                {% for trailer in trailer_data %}
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Oppenheimer</td>
-                                    <td>Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</td>
-                                    <td>https://pacilflix.com/watch/30123456</td>
-                                    <td>2023-11-07</td>
-                                    <td>100000</td>
+                                    <th scope="row">{{ trailer.rank }}</th>
+                                    <td>{{ trailer.judul }}</td>
+                                    <td>{{ trailer.sinopsis_trailer }}</td>
+                                    <td>{{ trailer.url_video_trailer }}</td>
+                                    <td>{{ trailer.release_date_trailer }}</td>
+                                    <td>{{ trailer.total_views }}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Pride and Prejudice</td>
-                                    <td>Petualangan mistis seorang gadis muda yang menemukan dunia fantasi yang menantang kenyataan perang dan kebrutalan.</td>
-                                    <td>https://pacilflix.com/watch/30123461</td>
-                                    <td>2020-06-16</td>
-                                    <td>90000</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Toy Story 2</td>
-                                    <td>Drama mendebarkan tentang upaya bangsa untuk bertahan hidup dalam menghadapi bencana alam yang tidak terhindarkan.</td>
-                                    <td>https://pacilflix.com/watch/30123460</td>
-                                    <td>2016-05-20</td>
-                                    <td>85000</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Squid Game</td>
-                                    <td>Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</td>
-                                    <td>https://pacilflix.com/watch/30123467</td>
-                                    <td>2017-11-12</td>
-                                    <td>60000</td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -114,24 +90,14 @@ PacilFlix | Tralier Tayangan
                                 </thead>
 
                                 <tbody>
+                                    {% for film in film_data %}
                                     <tr>
-                                        <td>Oppenheimer</td>
-                                        <td>Dimulai dengan gambaran suasana yang dramatis di Laboratorium Los Alamos, trailer menggambarkan Oppenheimer sebagai seorang ilmuwan yang berjuang dengan konsekuensi moral dari karyanya yang mengerikan.</td>
-                                        <td>https://pacilflix.com/watch/30123456</td>
-                                        <td>2023-05-07</td>
+                                        <td>{{ film.judul }}</td>
+                                        <td>{{ film.sinopsis_trailer }}</td>
+                                        <td>{{ film.url_video_trailer }}</td>
+                                        <td>{{ film.release_date_trailer }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Pride and Prejudice</td>
-                                        <td>Petualangan mistis seorang gadis muda yang menemukan dunia fantasi yang menantang kenyataan perang dan kebrutalan.</td>
-                                        <td>https://pacilflix.com/watch/30123461</td>
-                                        <td>2020-06-16</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Toy Story 2</td>
-                                        <td>Drama mendebarkan tentang upaya bangsa untuk bertahan hidup dalam menghadapi bencana alam yang tidak terhindarkan.</td>
-                                        <td>https://pacilflix.com/watch/30123460</td>
-                                        <td>2016-05-20</td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -156,18 +122,14 @@ PacilFlix | Tralier Tayangan
                                 </thead>
 
                                 <tbody>
+                                    {% for series in series_data %}
                                     <tr>
-                                        <td>Squid Game</td>
-                                        <td>Masing-masing tenggelam dalam kesulitan kehidupan mereka. Mendadak, masing-masing menerima sebuah undangan misterius.</td>
-                                        <td>https://pacilflix.com/watch/30123467</td>
-                                        <td>2017-11-12</td>
+                                        <td>{{ series.judul }}</td>
+                                        <td>{{ series.sinopsis_trailer }}</td>
+                                        <td>{{ series.url_video_trailer }}</td>
+                                        <td>{{ series.release_date_trailer }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Stranger Things</td>
-                                        <td>Kisah intim dan visual yang menarik tentang kehidupan sehari-hari dan tantangan besar dalam masyarakat Meksiko.</td>
-                                        <td>https://pacilflix.com/watch/30123468</td>
-                                        <td>2018-02-10</td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -177,6 +139,5 @@ PacilFlix | Tralier Tayangan
         </div>
     </body>
 </main>
-
 
 {% endblock %}

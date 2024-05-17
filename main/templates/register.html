@@ -9,47 +9,11 @@
 {% load static %} 
 
 {% include 'preloader.html' %}
-<!-- Navbar code goes here -->
-<header>
-    <!-- Header Start -->
-    <div class="header-area header-transparent">
-        <div class="main-header ">
-            <div class="header-bottom  header-sticky">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <!-- Logo -->
-                        <div class="col-xl-2 col-lg-2">
-                            <div class="logo">
-                                <a href="index.html"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt=""></a>
-                            </div>
-                        </div>
-                        <div class="col-xl-10 col-lg-10">
-                            <div class="menu-wrapper d-flex align-items-center justify-content-end">
-                                <!-- Main-menu -->
-                                <div class="main-menu d-none d-lg-block">
-                                    <nav>
-                                        <ul id="navigation">                                                                                          
-                                           
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div> 
-                        <!-- Mobile Menu -->
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header End -->
-</header>
-<!-- Register -->
+
+
 <main class="login-body" data-vide-bg="{% static 'img/login-bg.mp4' %}">
-    <!-- Login Admin -->
-    <form class="form-default" action="{% url 'main:register' %}" method="POST" novalidate>
+
+    <form id="register-form" class="form-default" action="{% url 'main:register' %}" method="POST" novalidate>
         {% csrf_token %}
         <div class="login-form">
             <!-- logo-login -->
@@ -60,25 +24,39 @@
             <div class="form-input">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Masukkan Username" required pattern="^\S+$" title="Username tidak boleh mengandung spasi">
-                <span class="error" style="color:red;display:none;">Silakan isi username yang valid.</span>
+                <!-- <span class="error" style="color:red;display:none;">Silakan isi username yang valid.</span> -->
             </div>
             
             <div class="form-input">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Masukkan Password" required minlength="6">
-                <span class="error" style="color:red;display:none;">Password harus minimal 6 karakter.</span>
+                <!-- <span class="error" style="color:red;display:none;">Password harus minimal 6 karakter.</span> -->
             </div>
     
             <div class="form-input">
                 <label for="negara_asal">Negara Asal</label>
                 <input type="text" id="negara_asal" name="negara_asal" placeholder="Masukkan Negara Asal" required>
+<<<<<<< HEAD
+=======
+                <!-- <span class="error" style="color:red;display:none;">Silakan isi negara asal.</span> -->
+>>>>>>> 38bf48816ea853dade6acec38ac1709e451b35a6
             </div>
             
             <div class="form-input pt-30">
-                <input type="submit" name="submit" value="Daftar">
+                <input id="submit-btn" type="submit" name="submit" value="Daftar">
             </div>
             
             <a href="{% url 'main:login_view' %}" class="Login">Login</a>
+<<<<<<< HEAD
+=======
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+>>>>>>> 38bf48816ea853dade6acec38ac1709e451b35a6
         </div>
     </form>
     <!-- /end login form -->
@@ -91,7 +69,8 @@
             var negara_asal = document.getElementById('negara_asal');
             var errorUsername = username.nextElementSibling;
             var errorPassword = password.nextElementSibling;
-
+            var errorNegaraAsal = negara_asal.nextElementSibling;
+    
             // Validasi username
             if (!username.value.trim() || /\s/.test(username.value)) {
                 errorUsername.style.display = 'block';
@@ -99,7 +78,7 @@
             } else {
                 errorUsername.style.display = 'none';
             }
-
+    
             // Validasi password
             if (password.value.length < 6) {
                 errorPassword.style.display = 'block';
@@ -107,6 +86,7 @@
             } else {
                 errorPassword.style.display = 'none';
             }
+<<<<<<< HEAD
 
             // Validasi negara_asal
             if (!negara_asal.value.trim()) {
@@ -116,11 +96,49 @@
                 negara_asal.nextElementSibling.style.display = 'none';
             }
 
+=======
+    
+            // Validasi negara_asal
+            if (!negara_asal.value.trim()) {
+                errorNegaraAsal.style.display = 'block';
+                isValid = false;
+            } else {
+                errorNegaraAsal.style.display = 'none';
+            }
+    
+>>>>>>> 38bf48816ea853dade6acec38ac1709e451b35a6
             if (!isValid) {
                 event.preventDefault(); // Menghentikan submission
             }
         });
+    
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            var form = document.getElementById('register-form');
+            var formData = new FormData(form);
+    
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                // Handle response data, redirect if necessary
+                window.location.href = "{% url 'media_tayangan:tayangan_view' %}";
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
     </script>
+    
 </main>
 
 {% endblock %}

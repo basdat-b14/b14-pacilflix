@@ -1,6 +1,7 @@
 from django.urls import path
 from b14_pacilflix import settings
 from main.views import show_main, login_view, logout, register
+
 from django.conf.urls.static import static
 
 app_name = 'main'

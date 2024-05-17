@@ -11,7 +11,11 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2">
                             <div class="logo">
-                                <a href="#"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt="" style="width: 100px; height: auto;"></a>
+                                {% if request.session.is_authenticated %}
+                                <a href="{% url 'media_tayangan:tayangan_view' %}"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt="" style="width: 100px; height: auto;"></a>
+                                {% else %} 
+                                <a href="/"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt="" style="width: 100px; height: auto;"></a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10">
@@ -21,7 +25,6 @@
                                     <nav>
                                         <ul id="navigation">    
                                             {% if request.session.is_authenticated %}
-                                                <li><a href="{% url 'users:dashboard_pengguna' %}">Dashboard Pengguna</a></li>
                                                 <li><a href="{% url 'media_tayangan:tayangan_view' %}">Daftar Tayangan</a></li>
                                                 <li><a href="{% url 'daftar_kontributor_page' %}">Daftar Kontributor</a></li>
                                                 <li><a href="#">Kelola</a>
@@ -36,7 +39,6 @@
                                             {% else %} 
                                                 <li class="active"><a href="{% url 'media_tayangan:trailer_view' %}">Trailer Tayangan</a></li>
                                             {% endif %}
-                                            
                                         </ul>
                                     </nav>
                                 </div>
@@ -65,7 +67,6 @@
         position: sticky;  
         top: 0;  
         z-index: 1000; 
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
     }
 
     .button-header {
@@ -75,5 +76,4 @@
         font-weight: bold; 
     }
 </style>
-
 

@@ -8,8 +8,6 @@
     
 {% load static %} 
 
-{% include 'preloader.html' %}
-
 <!-- Navbar code goes here -->
 <header>
     <!-- Header Start -->
@@ -70,6 +68,13 @@
             
             <a href="{% url 'main:register' %}">Registration</a>
 
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </form>
     <!-- /end login form -->
