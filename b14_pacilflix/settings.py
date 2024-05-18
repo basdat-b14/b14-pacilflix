@@ -30,9 +30,9 @@ SECRET_KEY = 'django-insecure-s%k(w%@92$a6%ymj5(hf%3r6^^x$u&@l0$@szpm8fat#p+24%4
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://web-production-e099.up.railway.app']
-# CSRF_TRUSTED_ORIGINS = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
-# CORS_ORIGIN_WHITELIST = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
+# CSRF_TRUSTED_ORIGINS = ['https://web-production-e099.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
+CORS_ORIGIN_WHITELIST = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
 
 # Application definition
 
