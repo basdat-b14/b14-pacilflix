@@ -65,7 +65,6 @@ def get_session_data(request):
         return {}
 
 
-@csrf_exempt
 def login(request):
     next = request.GET.get("next")
     if request.method != "POST":
