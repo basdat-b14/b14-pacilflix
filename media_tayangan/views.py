@@ -131,7 +131,7 @@ def trailer_view(request):
         "series_data": series_data,
     }
     
-    return render(request, 'trailer.html', context)
+    return render(request, 'Trailer.html', context)
 
 def cari_trailer(request):
     judul_tayangan = request.GET.get('judul_tayangan')
@@ -301,7 +301,7 @@ def tayangan_view(request):
         "series_data": series_data,
     }
 
-    return render(request, 'tayangan.html', context)
+    return render(request, 'Tayangan.html', context)
 
 def cari_tayangan(request):
     if not is_authenticated(request):
