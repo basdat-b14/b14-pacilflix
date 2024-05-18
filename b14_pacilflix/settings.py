@@ -31,8 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 # CSRF_TRUSTED_ORIGINS = ['https://web-production-e099.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
-CORS_ORIGIN_WHITELIST = ["https://web-production-e099.up.railway.app/", "http://localhost:8000", "http://127.0.0.1:8000/"]
+CSRF_TRUSTED_ORIGINS = ["https://web-production-e099.up.railway.app", "http://localhost:8000", "http://127.0.0.1:8000/"]
+CORS_ORIGIN_WHITELIST = ["https://web-production-e099.up.railway.app", "http://localhost:8000", "http://127.0.0.1:8000/"]
 
 # Application definition
 
