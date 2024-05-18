@@ -6,7 +6,8 @@ PacilFlix | Daftar Tayangan
 {% endblock %}
 
 {% block content %}
-{% include 'navbar.html' %}
+<!-- {% include 'navbar.html' %} -->
+
 
 <style>
     body {
@@ -14,6 +15,14 @@ PacilFlix | Daftar Tayangan
     }
     .btn-custom {
         background-color: #6a5acd;
+        color: rgb(255, 255, 255);
+        padding: 8px 5px;
+        font-size: 10.85px;
+        border-radius: 5px;
+        border: none;
+    }
+    .btn-custom-disable {
+        background-color: #8a8991;
         color: rgb(255, 255, 255);
         padding: 8px 5px;
         font-size: 10.85px;
@@ -31,12 +40,14 @@ PacilFlix | Daftar Tayangan
                         <h1>DAFTAR TAYANGAN</h1>
                     </div>
 
-                    <div class="input-group rounded m-3 p-3">
-                        <input type="search" class="form-control rounded" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
-                        <span class="input-group-text border-0" id="search-addon">
-                            <a href="{% url 'media_tayangan:cari_tayangan' %}"><i class="fas fa-search" style="color: rgb(0, 0, 0);"></i></a>
-                        </span>
-                    </div>
+                    <form action="{% url 'media_tayangan:cari_tayangan' %}" method="GET">
+                        <div class="input-group rounded m-3 p-3">
+                            <input type="search" class="form-control rounded" name="judul_tayangan" placeholder="Cari tayangan berdasarkan judul" aria-label="Search" aria-describedby="search-addon" style="height: 28px; font-size: 75%;" />
+                            <button type="submit" class="input-group-text border-0" id="search-addon">
+                                <i class="fas fa-search" style="color: rgb(0, 0, 0);"></i>
+                            </button>
+                        </div>
+                    </form>   
 
                     <div class="text-center pt-3">
                         <h3>10 Tayangan Terbaik Minggu Ini</h3>
@@ -66,7 +77,7 @@ PacilFlix | Daftar Tayangan
                             <tbody>
                                 {% for tayangan in tayangan_data %}
                                 <tr>
-                                    <th scope="row">{{ tayangan.rank }}</th>
+                                    <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{ tayangan.judul }}</td>
                                     <td>{{ tayangan.sinopsis_trailer }}</td>
                                     <td>{{ tayangan.url_video_trailer }}</td>
@@ -74,26 +85,17 @@ PacilFlix | Daftar Tayangan
                                     <td>{{ tayangan.total_views }}</td>
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            {% if tayangan.type == 'film' %}
-                                                <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
-                                            {% elif tayangan.type == 'series' %}
-                                                <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                            {% if check_package.0.is_active == True %}
+                                                {% if tayangan.type == 'film' %}
+                                                    <a href="{% url 'media_tayangan:film_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                {% elif tayangan.type == 'series' %}
+                                                    <a href="{% url 'media_tayangan:series_view' tayangan.judul %}" class="btn-custom">See more</a>
+                                                {% endif %}
+                                            {% else %}
+                                                <a href="#" class="btn-custom-disable" aria-disabled="true">See more</a>
                                             {% endif %}
                                         </div>
                                     </td>
-                                    <!-- <td>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            {% if check_package.is_active == '1' %}
-                                                {% if tayangan.type == 'film' %}
-                                                    <a href="{% url 'film_view' tayangan.judul %}" class="btn-custom">See more</a>
-                                                {% elif tayangan.type == 'series' %}
-                                                    <a href="{% url 'series_view' tayangan.judul %}" class="btn-custom">See more</a>
-                                                {% endif %}
-                                            {% else %}
-                                                <a href="#" class="btn-custom disabled" aria-disabled="true">See more</a>
-                                            {% endif %}
-                                        </div>
-                                    </td> -->
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -122,13 +124,17 @@ PacilFlix | Daftar Tayangan
                                 <tbody>
                                     {% for film in film_data %}
                                     <tr>
-                                        <th scope="row">{{ film.judul }}</th>
+                                        <td>{{ film.judul }}</td>
                                         <td>{{ film.sinopsis_trailer }}</td>
                                         <td>{{ film.url_video_trailer }}</td>
                                         <td>{{ film.release_date_trailer }}</td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <a href="{% url 'media_tayangan:film_view' film.judul %}" class="btn-custom">See more</a>
+                                                {% if check_package.0.is_active == True %}
+                                                    <a href="{% url 'media_tayangan:film_view' film.judul %}" class="btn-custom">See more</a>
+                                                {% else %}
+                                                    <a href="#" class="btn-custom-disable" aria-disabled="true">See more</a>
+                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>
@@ -161,13 +167,17 @@ PacilFlix | Daftar Tayangan
                                 <tbody>
                                     {% for series in series_data %}
                                     <tr>
-                                        <th scope="row">{{ series.judul }}</th>
+                                        <td>{{ series.judul }}</td>
                                         <td>{{ series.sinopsis_trailer }}</td>
                                         <td>{{ series.url_video_trailer }}</td>
                                         <td>{{ series.release_date_trailer }}</td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <a href="{% url 'media_tayangan:series_view' series.judul %}" class="btn-custom">See more</a>
+                                                {% if check_package.0.is_active == True %}
+                                                    <a href="{% url 'media_tayangan:series_view' series.judul %}" class="btn-custom">See more</a>
+                                                {% else %}
+                                                    <a href="#" class="btn-custom-disable" aria-disabled="true">See more</a>
+                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>

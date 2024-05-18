@@ -42,7 +42,10 @@
     
 <main class="login-body" data-vide-bg="{% static 'img/login-bg.mp4' %}">
     <!-- Login Admin -->
-    <form class="form-default" action="" method="POST">
+    <!-- <form class="form-default" action="" method="POST"> -->
+    <form method="POST" action="/login/">
+        {% csrf_token %}
+    <!--   <form class="form-default" action="{% url 'main:login_view' %}" method="POST"> -->
         <div class="login-form">
             <!-- logo-login -->
             <div class="logo-login">
@@ -62,10 +65,9 @@
             <div class="form-input pt-30">
                 <input type="submit" name="submit" value="Masuk">
             </div>
-            <!-- Forget Password -->
-            <a href="#" class="forget">Forget Password</a>
             
-            <a href="{% url 'main:register' %}">Registration</a>
+            <!-- <a href="{% url 'main:register' %}">Registration</a> -->
+            <a href="/register/">Registration</a>
 
             {% if messages %}
                 {% for message in messages %}

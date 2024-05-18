@@ -36,7 +36,8 @@
 
 <main class="login-body" data-vide-bg="{% static 'img/login-bg.mp4' %}">
 
-    <form id="register-form" class="form-default" action="{% url 'main:register' %}" method="POST" novalidate>
+    <!-- <form id="register-form" class="form-default" action="{% url 'main:register' %}" method="POST" novalidate> -->
+    <form method="POST" action="">
         <div class="login-form">
             <!-- logo-login -->
             <div class="logo-login">
@@ -58,14 +59,13 @@
             <div class="form-input">
                 <label for="negara_asal">Negara Asal</label>
                 <input type="text" id="negara_asal" name="negara_asal" placeholder="Masukkan Negara Asal" required>
-                <!-- <span class="error" style="color:red;display:none;">Silakan isi negara asal.</span> -->
             </div>
             
             <div class="form-input pt-30">
                 <input id="submit-btn" type="submit" name="submit" value="Daftar">
             </div>
             
-            <a href="{% url 'main:login_view' %}" class="Login">Login</a>
+            <a href="/login/" class="Login">Login</a>
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-danger">
