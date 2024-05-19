@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect
 from utils.query import query, query_insert
+from django.urls import reverse
+from django.contrib import messages
+from django.db import connection
+
+connection.ensure_connection()
 
 def is_authenticated(request):
     try:
@@ -8,7 +13,6 @@ def is_authenticated(request):
     except KeyError:
         return False
 
-#TODO: top 10 query still bug
 def trailer_view(request):
     trailer_data = query(
         """WITH EpisodeDurations AS (
@@ -22,32 +26,37 @@ def trailer_view(request):
             ),
             EpisodeViews AS (
                 SELECT
-                    rn.id_tayangan,
-                    COUNT(DISTINCT e.id_series) FILTER (
-                        WHERE e.id_series IS NOT NULL
-                        AND (rn.end_date_time - rn.start_date_time) >= INTERVAL '1 minute' * (e.durasi * 0.7)
+                    e.id_series AS id_tayangan,
+                    COUNT(DISTINCT rn.id_tayangan) FILTER (
+                        WHERE
+                            (rn.end_date_time - rn.start_date_time) >= (e.durasi * INTERVAL '1 minute' * 0.7)
                     ) AS episode_views,
-                    SUM(EXTRACT(MINUTE FROM (rn.end_date_time - rn.start_date_time))) AS total_duration_watched
+                    SUM(
+                        EXTRACT(
+                            MINUTE FROM (rn.end_date_time - rn.start_date_time)
+                        ) * 60 +
+                        EXTRACT(
+                            SECOND FROM (rn.end_date_time - rn.start_date_time)
+                        )
+                    ) AS total_duration_watched
                 FROM
                     "PacilFlix"."RIWAYAT_NONTON" rn
-                LEFT JOIN
-                    "PacilFlix"."EPISODE" e ON e.id_series = rn.id_tayangan
+                    JOIN "PacilFlix"."EPISODE" e ON e.id_series = rn.id_tayangan
                 WHERE
                     rn.end_date_time >= NOW() - INTERVAL '7 days'
                 GROUP BY
-                    rn.id_tayangan
+                    e.id_series
             ),
             FilmViews AS (
                 SELECT
                     rn.id_tayangan,
                     COUNT(*) FILTER (
-                        WHERE f.id_tayangan IS NOT NULL
-                        AND (rn.end_date_time - rn.start_date_time) >= INTERVAL '1 minute' * (f.durasi_film * 0.7)
+                        WHERE
+                            (rn.end_date_time - rn.start_date_time) >= (f.durasi_film * INTERVAL '1 minute' * 0.7)
                     ) AS film_views
                 FROM
                     "PacilFlix"."RIWAYAT_NONTON" rn
-                LEFT JOIN
-                    "PacilFlix"."FILM" f ON rn.id_tayangan = f.id_tayangan
+                    JOIN "PacilFlix"."FILM" f ON rn.id_tayangan = f.id_tayangan
                 WHERE
                     rn.end_date_time >= NOW() - INTERVAL '7 days'
                 GROUP BY
@@ -60,31 +69,14 @@ def trailer_view(request):
                     t.sinopsis_trailer,
                     t.url_video_trailer,
                     t.release_date_trailer,
-                    COALESCE(ev.episode_views, 0) AS total_views
+                    COALESCE(ev.episode_views, fv.film_views, 0) AS total_views
                 FROM
                     "PacilFlix"."TAYANGAN" t
-                LEFT JOIN
-                    EpisodeViews ev ON t.id = ev.id_tayangan
-                LEFT JOIN
-                    EpisodeDurations fd ON t.id = fd.id_series
-                WHERE
-                    fd.id_series IS NOT NULL
-
-                UNION ALL
-
-                SELECT
-                    t.id,
-                    t.judul,
-                    t.sinopsis_trailer,
-                    t.url_video_trailer,
-                    t.release_date_trailer,
-                    COALESCE(fv.film_views, 0) AS total_views
-                FROM
-                    "PacilFlix"."TAYANGAN" t
-                LEFT JOIN
-                    FilmViews fv ON t.id = fv.id_tayangan
+                    LEFT JOIN EpisodeViews ev ON t.id = ev.id_tayangan
+                    LEFT JOIN FilmViews fv ON t.id = fv.id_tayangan
             )
             SELECT
+                id,
                 judul,
                 sinopsis_trailer,
                 url_video_trailer,
@@ -92,6 +84,8 @@ def trailer_view(request):
                 total_views
             FROM
                 MergedViews
+            WHERE
+                total_views > 0
             ORDER BY
                 total_views DESC
             LIMIT
@@ -131,7 +125,7 @@ def trailer_view(request):
         "series_data": series_data,
     }
     
-    return render(request, 'trailer.html', context)
+    return render(request, 'Trailer.html', context)
 
 def cari_trailer(request):
     judul_tayangan = request.GET.get('judul_tayangan')
@@ -177,82 +171,86 @@ def tayangan_view(request):
     )
     
     tayangan_data = query(
-        """WITH EpisodeDurations AS (
-                SELECT
-                    e.id_series,
-                    SUM(e.durasi) AS total_series_duration
-                FROM
-                    "PacilFlix"."EPISODE" e
-                GROUP BY
-                    e.id_series
-            ),
-            EpisodeViews AS (
-                SELECT
-                    rn.id_tayangan,
-                    COUNT(DISTINCT e.id_series) FILTER (
-                        WHERE e.id_series IS NOT NULL
-                        AND (rn.end_date_time - rn.start_date_time) >= INTERVAL '1 minute' * (e.durasi * 0.7)
-                    ) AS episode_views,
-                    SUM(EXTRACT(MINUTE FROM (rn.end_date_time - rn.start_date_time))) AS total_duration_watched
-                FROM
-                    "PacilFlix"."RIWAYAT_NONTON" rn
-                LEFT JOIN
-                    "PacilFlix"."EPISODE" e ON e.id_series = rn.id_tayangan
-                WHERE
-                    rn.end_date_time >= NOW() - INTERVAL '7 days'
-                GROUP BY
-                    rn.id_tayangan
-            ),
-            FilmViews AS (
-                SELECT
-                    rn.id_tayangan,
-                    COUNT(*) FILTER (
-                        WHERE f.id_tayangan IS NOT NULL
-                        AND (rn.end_date_time - rn.start_date_time) >= INTERVAL '1 minute' * (f.durasi_film * 0.7)
-                    ) AS film_views
-                FROM
-                    "PacilFlix"."RIWAYAT_NONTON" rn
-                LEFT JOIN
-                    "PacilFlix"."FILM" f ON rn.id_tayangan = f.id_tayangan
-                WHERE
-                    rn.end_date_time >= NOW() - INTERVAL '7 days'
-                GROUP BY
-                    rn.id_tayangan
-            ),
-            MergedViews AS (
-                SELECT
-                    t.id,
-                    t.judul,
-                    t.sinopsis_trailer,
-                    t.url_video_trailer,
-                    t.release_date_trailer,
-                    COALESCE(ev.episode_views, 0) AS total_views,
-                    'series' AS type
-                FROM
-                    "PacilFlix"."TAYANGAN" t
-                LEFT JOIN
-                    EpisodeViews ev ON t.id = ev.id_tayangan
-                LEFT JOIN
-                    EpisodeDurations fd ON t.id = fd.id_series
-                WHERE
-                    fd.id_series IS NOT NULL
+        """WITH
+                EpisodeDurations AS (
+                    SELECT
+                        e.id_series,
+                        SUM(e.durasi) AS total_series_duration
+                    FROM
+                        "PacilFlix"."EPISODE" e
+                    GROUP BY
+                        e.id_series
+                ),
+                EpisodeViews AS (
+                    SELECT
+                        e.id_series AS id_tayangan,
+                        COUNT(DISTINCT rn.id_tayangan) FILTER (
+                            WHERE
+                                (rn.end_date_time - rn.start_date_time) >= (e.durasi * INTERVAL '1 minute' * 0.7)
+                        ) AS episode_views,
+                        SUM(
+                            EXTRACT(
+                                MINUTE FROM (rn.end_date_time - rn.start_date_time)
+                            ) * 60 +
+                            EXTRACT(
+                                SECOND FROM (rn.end_date_time - rn.start_date_time)
+                            )
+                        ) AS total_duration_watched
+                    FROM
+                        "PacilFlix"."RIWAYAT_NONTON" rn
+                        JOIN "PacilFlix"."EPISODE" e ON e.id_series = rn.id_tayangan
+                    WHERE
+                        rn.end_date_time >= NOW() - INTERVAL '7 days'
+                    GROUP BY
+                        e.id_series
+                ),
+                FilmViews AS (
+                    SELECT
+                        rn.id_tayangan,
+                        COUNT(*) FILTER (
+                            WHERE
+                                (rn.end_date_time - rn.start_date_time) >= (f.durasi_film * INTERVAL '1 minute' * 0.7)
+                        ) AS film_views
+                    FROM
+                        "PacilFlix"."RIWAYAT_NONTON" rn
+                        JOIN "PacilFlix"."FILM" f ON rn.id_tayangan = f.id_tayangan
+                    WHERE
+                        rn.end_date_time >= NOW() - INTERVAL '7 days'
+                    GROUP BY
+                        rn.id_tayangan
+                ),
+                MergedViews AS (
+                    SELECT
+                        t.id,
+                        t.judul,
+                        t.sinopsis_trailer,
+                        t.url_video_trailer,
+                        t.release_date_trailer,
+                        COALESCE(ev.episode_views, 0) AS total_views,
+                        'series' AS type
+                    FROM
+                        "PacilFlix"."TAYANGAN" t
+                        LEFT JOIN EpisodeViews ev ON t.id = ev.id_tayangan
+                        LEFT JOIN EpisodeDurations fd ON t.id = fd.id_series
+                    WHERE
+                        fd.id_series IS NOT NULL
 
-                UNION ALL
+                    UNION ALL
 
-                SELECT
-                    t.id,
-                    t.judul,
-                    t.sinopsis_trailer,
-                    t.url_video_trailer,
-                    t.release_date_trailer,
-                    COALESCE(fv.film_views, 0) AS total_views,
-                    'film' AS type
-                FROM
-                    "PacilFlix"."TAYANGAN" t
-                LEFT JOIN
-                    FilmViews fv ON t.id = fv.id_tayangan
-            )
+                    SELECT
+                        t.id,
+                        t.judul,
+                        t.sinopsis_trailer,
+                        t.url_video_trailer,
+                        t.release_date_trailer,
+                        COALESCE(fv.film_views, 0) AS total_views,
+                        'film' AS type
+                    FROM
+                        "PacilFlix"."TAYANGAN" t
+                        LEFT JOIN FilmViews fv ON t.id = fv.id_tayangan
+                )
             SELECT
+                id,
                 judul,
                 sinopsis_trailer,
                 url_video_trailer,
@@ -261,6 +259,8 @@ def tayangan_view(request):
                 type
             FROM
                 MergedViews
+            WHERE
+                total_views > 0
             ORDER BY
                 total_views DESC
             LIMIT
@@ -301,7 +301,7 @@ def tayangan_view(request):
         "series_data": series_data,
     }
 
-    return render(request, 'tayangan.html', context)
+    return render(request, 'Tayangan.html', context)
 
 def cari_tayangan(request):
     if not is_authenticated(request):
@@ -360,9 +360,23 @@ def film_view(request, judul):
         return redirect('/login')
     
     film_data = query(
-        f'''SELECT
+        f'''WITH FilmViews AS (
+                SELECT
+                    rn.id_tayangan,
+                    COUNT(*) FILTER (
+                        WHERE f.id_tayangan IS NOT NULL
+                        AND (rn.end_date_time - rn.start_date_time) >= INTERVAL '1 minute' * (f.durasi_film * 0.7)
+                    ) AS film_views
+                FROM
+                    "PacilFlix"."RIWAYAT_NONTON" rn
+                LEFT JOIN
+                    "PacilFlix"."FILM" f ON rn.id_tayangan = f.id_tayangan
+                GROUP BY
+                    rn.id_tayangan
+            )
+            SELECT
                 t.judul,
-                count(r.username) as "total_view",
+                COALESCE(fv.film_views, 0) AS "total_view",
                 round(avg(u.rating), 1) as "rating",
                 t.sinopsis,
                 f.durasi_film,
@@ -389,10 +403,11 @@ def film_view(request, judul):
                 LEFT JOIN "PacilFlix"."CONTRIBUTORS" as ps ON mst.id_penulis_skenario = ps.id
                 LEFT JOIN "PacilFlix"."SUTRADARA" AS s ON t.id_sutradara = s.id
                 LEFT JOIN "PacilFlix"."CONTRIBUTORS" AS d ON s.id = d.id
+                LEFT JOIN FilmViews fv ON t.id = fv.id_tayangan
             WHERE
                 t.judul = '{judul}'
             GROUP BY
-                t.id, f.durasi_film, f.release_date_film, f.url_video_film;
+                t.id, f.durasi_film, f.release_date_film, f.url_video_film, fv.film_views;
         '''
     )
 
@@ -418,11 +433,14 @@ def film_view(request, judul):
     penulis_list.extend(film_data[0].penulis.split(','))
     pemain_list.extend(film_data[0].pemain.split(','))
 
+    warning_message = request.GET.get('warning')
+
     context = {
         "film_data": film_data,
         "penulis_list": penulis_list,
         "pemain_list": pemain_list,
-        "review_data": review_data
+        "review_data": review_data,
+        "warning_message": warning_message
     }
 
     return render(request, 'halaman_film.html', context)
@@ -432,17 +450,42 @@ def series_view(request, judul):
         return redirect('/login')
     
     series_data = query(
-        f'''SELECT
+        f'''WITH
+                EpisodeDurations AS (
+                    SELECT
+                        e.id_series,
+                        SUM(e.durasi) AS total_series_duration
+                    FROM
+                        "PacilFlix"."EPISODE" e
+                    GROUP BY
+                        e.id_series
+                ),
+                EpisodeViews AS (
+                    SELECT
+                        se.id_tayangan AS id_tayangan,
+                        COUNT(DISTINCT rn.username) FILTER (
+                            WHERE
+                                (rn.end_date_time - rn.start_date_time) >= (e.durasi * INTERVAL '1 minute' * 0.7)
+                        ) AS episode_views
+                    FROM
+                        "PacilFlix"."SERIES" se
+                        JOIN "PacilFlix"."EPISODE" e ON se.id_tayangan = e.id_series
+                        LEFT JOIN "PacilFlix"."RIWAYAT_NONTON" rn ON e.id_series = rn.id_tayangan
+                    GROUP BY
+                        se.id_tayangan
+                )
+
+            SELECT
                 t.judul,
-                count(r.username) as "total_view",
-                round(avg(u.rating), 1) as "rating",
+                COALESCE(ev.episode_views, 0) as "total_view",
+                ROUND(AVG(u.rating), 1) as "rating",
                 t.sinopsis,
-                array_to_string(array_agg(DISTINCT gt.genre), ',') AS "genre",
+                ARRAY_TO_STRING(ARRAY_AGG(DISTINCT gt.genre), ',') AS "genre",
                 t.asal_negara,
-                array_to_string(array_agg(DISTINCT pc.nama ORDER BY pc.nama), ',') AS "pemain",
-                array_to_string(array_agg(DISTINCT ps.nama ORDER BY ps.nama), ',') AS "penulis",
-                array_to_string(array_agg(DISTINCT d.nama ORDER BY d.nama), ',') AS "sutradara",
-                array_to_string(array_agg(DISTINCT e.sub_judul), ',') AS "episode"
+                ARRAY_TO_STRING(ARRAY_AGG(DISTINCT pc.nama ORDER BY pc.nama), ',') AS "pemain",
+                ARRAY_TO_STRING(ARRAY_AGG(DISTINCT ps.nama ORDER BY ps.nama), ',') AS "penulis",
+                ARRAY_TO_STRING(ARRAY_AGG(DISTINCT d.nama ORDER BY d.nama), ',') AS "sutradara",
+                ARRAY_TO_STRING(ARRAY_AGG(DISTINCT e.sub_judul), ',') AS "episode"
             FROM
                 "PacilFlix"."TAYANGAN" as t
             JOIN "PacilFlix"."SERIES" as se ON t.id = se.id_tayangan
@@ -460,10 +503,11 @@ def series_view(request, judul):
             LEFT JOIN "PacilFlix"."CONTRIBUTORS" as ps ON mst.id_penulis_skenario = ps.id
             LEFT JOIN "PacilFlix"."SUTRADARA" AS s ON t.id_sutradara = s.id
             LEFT JOIN "PacilFlix"."CONTRIBUTORS" AS d ON s.id = d.id
+            LEFT JOIN EpisodeViews ev ON se.id_tayangan = ev.id_tayangan
             WHERE
                 t.judul = '{judul}'
             GROUP BY
-                t.id;
+                t.id, ev.episode_views;
         '''
     )
 
@@ -491,12 +535,15 @@ def series_view(request, judul):
     pemain_list.extend(series_data[0].pemain.split(','))
     episode_list.extend(series_data[0].episode.split(','))
 
+    warning_message = request.GET.get('warning')
+
     context = {
         "series_data": series_data,
         "penulis_list": penulis_list,
         "pemain_list": pemain_list,
         "episode_list": episode_list,
-        "review_data": review_data
+        "review_data": review_data,
+        "warning_message": warning_message
     }
 
     return render(request, 'halaman_series.html', context)
@@ -645,7 +692,7 @@ def save_progress_film(request):
             ''')
 
     return redirect('media_tayangan:film_view', judul=judul)
-    
+
 def ulasan(request):
     if not is_authenticated(request):
         return redirect('/login')
@@ -655,26 +702,6 @@ def ulasan(request):
         rating = request.POST.get('rating')
         deskripsi = request.POST.get('deskripsi')
         username = request.session.get('username')
-
-        print(username, judul, rating, deskripsi)
-
-        if judul and rating and deskripsi and username:
-            query_insert(f'''
-                INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
-                VALUES (
-                    (SELECT
-                        t.id
-                    FROM
-                        "PacilFlix"."TAYANGAN" AS t
-                    WHERE
-                        t.judul = '{judul}'
-                    ),
-                    DATE_TRUNC('second', current_timestamp),
-                    '{username}',
-                    {rating},
-                    '{deskripsi}'
-                );
-            ''')
 
         tayangan_type = query(
             f'''SELECT
@@ -693,7 +720,37 @@ def ulasan(request):
             '''
         )
 
-    if tayangan_type[0].tayangan_type == 'series':
-        return redirect('media_tayangan:series_view', judul=judul)
-    else:
-        return redirect('media_tayangan:film_view', judul=judul)
+        if not deskripsi and not rating:
+            messages.error(request, 'Rating dan deskripsi harus diisi')
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect('media_tayangan:series_view', judul=judul)
+            else:
+                return redirect('media_tayangan:film_view', judul=judul)
+        
+        warning_message = query_insert(f'''
+            INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
+            VALUES (
+                (SELECT
+                    t.id
+                FROM
+                    "PacilFlix"."TAYANGAN" AS t
+                WHERE
+                    t.judul = '{judul}'
+                ),
+                DATE_TRUNC('second', current_timestamp),
+                '{username}',
+                {rating},
+                '{deskripsi}'
+            );
+        ''')
+
+        if warning_message:
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect(reverse('media_tayangan:series_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
+            else:
+                return redirect(reverse('media_tayangan:film_view', kwargs={'judul': judul}) + f'?warning={warning_message}') 
+        else:
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect('media_tayangan:series_view', judul=judul)
+            else:
+                return redirect('media_tayangan:film_view', judul=judul)
