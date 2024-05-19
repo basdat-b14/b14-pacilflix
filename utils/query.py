@@ -1,10 +1,8 @@
 import psycopg2
 from psycopg2 import Error
-from django.conf import settings
 from django.db import connection
 from collections import namedtuple
-from psycopg2.extras import RealDictCursor
-from django.db import DatabaseError, IntegrityError, transaction
+from django.db import IntegrityError
 
 
 try : 
@@ -29,6 +27,7 @@ def map_cursor(cursor):
 
 def query(query_str: str):
     hasil = []
+
     with connection.cursor() as cursor:
         try:
             cursor.execute("SET SEARCH_PATH TO PacilFlix")
@@ -38,17 +37,28 @@ def query(query_str: str):
 
         try:
             cursor.execute(query_str)
-
-            # if query_str.strip().lower().startswith("select"):
             hasil = map_cursor(cursor)
-            # else:
-            #     # Kalau ga error, return jumlah row yang termodifikasi oleh INSERT, UPDATE, DELETE
-            #     hasil = cursor.rowcount
-            #     # Buat commit di database
-            #     connection.commit()
-
         except Exception as e:
             hasil = [str(e)]  # Convert the error message to a list
             connection.rollback()
 
     return hasil
+
+def query_insert(query_str: str):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SET SEARCH_PATH TO PacilFlix")
+        except Exception as e:
+            connection.rollback()
+            raise e
+
+        try:
+            cursor.execute(query_str)
+            connection.commit()
+            return None
+        except IntegrityError as e:
+            connection.rollback()
+            return str(e)
+        except Exception as e:
+            connection.rollback()
+            return str(e)

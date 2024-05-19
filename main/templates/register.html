@@ -10,11 +10,34 @@
 
 {% include 'preloader.html' %}
 
+<header>
+    <div class="header-area header-transparent">
+        <div class="main-header ">
+            <div class="header-bottom  header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a href="index.html"><img src="{% static 'img/logo/pacilflixlogo.png' %}" alt=""></a>
+                            </div>
+                        
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
 
 <main class="login-body" data-vide-bg="{% static 'img/login-bg.mp4' %}">
 
-    <form id="register-form" class="form-default" action="{% url 'main:register' %}" method="POST" novalidate>
-        {% csrf_token %}
+    <!-- <form id="register-form" class="form-default" action="{% url 'main:register' %}" method="POST" novalidate> -->
+    <form method="POST" action="">
         <div class="login-form">
             <!-- logo-login -->
             <div class="logo-login">
@@ -24,26 +47,25 @@
             <div class="form-input">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Masukkan Username" required pattern="^\S+$" title="Username tidak boleh mengandung spasi">
-                <span class="error" style="color:red;display:none;">Silakan isi username yang valid.</span>
+                <!-- <span class="error" style="color:red;display:none;">Silakan isi username yang valid.</span> -->
             </div>
             
             <div class="form-input">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Masukkan Password" required minlength="6">
-                <span class="error" style="color:red;display:none;">Password harus minimal 6 karakter.</span>
+                <!-- <span class="error" style="color:red;display:none;">Password harus minimal 6 karakter.</span> -->
             </div>
     
             <div class="form-input">
                 <label for="negara_asal">Negara Asal</label>
                 <input type="text" id="negara_asal" name="negara_asal" placeholder="Masukkan Negara Asal" required>
-                <span class="error" style="color:red;display:none;">Silakan isi negara asal.</span>
             </div>
             
             <div class="form-input pt-30">
                 <input id="submit-btn" type="submit" name="submit" value="Daftar">
             </div>
             
-            <a href="{% url 'main:login_view' %}" class="Login">Login</a>
+            <a href="/login/" class="Login">Login</a>
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-danger">

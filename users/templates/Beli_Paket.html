@@ -12,8 +12,7 @@ PacilFlix | Beli Paket
 
 <main class="py-4" style="background-color: #E0BBE4; padding-top: 5rem;">
     <div class="container center-box" style="position: relative; max-width: 600px; margin: auto;">
-        <!-- Close button aligned with the header -->
-        <a href="{% url 'subscription_page' %}" style="position: absolute; right: 10px; top: 10px; font-size: 24px; color: #6a5acd;">
+        <a href="{% url 'users:subscription_page' %}" style="position: absolute; right: 10px; top: 10px; font-size: 24px; color: #6a5acd;">
             <i class="fas fa-times"></i>
         </a>
 
@@ -23,22 +22,23 @@ PacilFlix | Beli Paket
 
         <div class="purchase-info" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Informasi Paket</h2>
-            <p><strong>Nama:</strong> {{ package.name }}</p>
-            <p><strong>Harga:</strong> {{ package.price }} IDR</p>
-            <p><strong>Resolusi Layar:</strong> {{ package.resolution }}</p>
-            <p><strong>Dukungan Perangkat:</strong> {{ package.support }}</p>
+            <p><strong>Nama:</strong> {{ package_info.nama }}</p>
+            <p><strong>Harga:</strong> {{ package_info.harga }} IDR</p>
+            <p><strong>Resolusi Layar:</strong> {{ package_info.resolusi_layar }}</p>
+            <p><strong>Dukungan Perangkat:</strong> {{ package_info.dukungan_perangkat }}</p>
 
             <h3>Pilih Metode Pembayaran:</h3>
-            <select class="form-control mb-3" style="width: 100%; margin-bottom: 10px;">
-                <option value="credit_card">Kartu Kredit</option>
-                <option value="ovo">OVO</option>
-                <option value="virtual_account">Virtual Account</option>
-                <option value="gopay">GoPay</option>
-                <option value="flip">Flip</option>
-            </select>
-            
-            <button class="btn btn-primary mb-3 detail-button" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
-            
+            <form method="POST" action="{% url 'users:buy_package' package_type=package_info.nama %}">
+                {% csrf_token %}
+                <select class="form-control mb-3" name="metode_pembayaran" style="width: 100%; margin-bottom: 10px;">
+                    <option value="Kartu Kredit">Kartu Kredit</option>
+                    <option value="OVO">OVO</option>
+                    <option value="Virtual Account">Virtual Account</option>
+                    <option value="GoPay">GoPay</option>
+                    <option value="Flip">Flip</option>
+                </select>
+                <button type="submit" class="btn btn-primary mb-3 detail-button" style="width: 100%; background-color: #6a5acd; border: none; border-radius: 4px; margin-top: 10px;">Bayar</button>
+            </form>
         </div>
     </div>
 </main>

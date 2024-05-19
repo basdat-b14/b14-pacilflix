@@ -15,6 +15,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+PRODUCTION = os.getenv('DATABASE_URL') is not None
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -28,7 +30,9 @@ SECRET_KEY = 'django-insecure-s%k(w%@92$a6%ymj5(hf%3r6^^x$u&@l0$@szpm8fat#p+24%4
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+# CSRF_TRUSTED_ORIGINS = ['https://web-production-e099.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ["https://web-production-e099.up.railway.app", "http://localhost:8000", "http://127.0.0.1:8000/"]
+CORS_ORIGIN_WHITELIST = ["https://web-production-e099.up.railway.app", "http://localhost:8000", "http://127.0.0.1:8000/"]
 
 # Application definition
 
@@ -47,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,7 +65,9 @@ ROOT_URLCONF = 'b14_pacilflix.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')], 
+        'DIRS': [BASE_DIR / 'templates'],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,6 +97,7 @@ DATABASES = {
     }
     
 }
+
 
 
 # Password validation
@@ -133,6 +141,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
