@@ -11,6 +11,12 @@ from psycopg2.extras import RealDictCursor
 
 
 
+
+def subscription_page(request):
+    return render(request, 'Langganan.html')
+
+
+
 def buy_package(request, package_type):
     if not request.session.get('is_authenticated'):
         return redirect('main:login_view')  # Redirect ke login kalo engga authenticated

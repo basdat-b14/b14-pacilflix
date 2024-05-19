@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block title %}
-Daftar Favorit
+Daftar Unduhan
+
 {% endblock %}
 
 {% block content %}
@@ -27,11 +28,15 @@ Daftar Favorit
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for unduhan in daftar_unduhan %}
                                     <tr>
-                                        <td style="vertical-align: middle;">Oppenheimer</td>
-                                        <td style="vertical-align: middle;">2024-04-02 16:45:10</td>
-                                        <td style="vertical-align: middle;"><button class="btn btn-danger btn-sm hapus">Hapus</button></td>
+                                        <td style="vertical-align: middle;">{{ unduhan.nama_tayangan }}</td>
+                                        <td style="vertical-align: middle;">{{ unduhan.timestamp }}</td>
+                                        <td style="vertical-align: middle;">
+                                            <button onclick="DeleteUnduhan(event,'{{unduhan.nama_tayangan}}','{{unduhan.username}}','{{unduhan.id_tayangan}}')" class="btn btn-danger btn-sm hapus">Hapus</button>            
+                                        </td>
                                     </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -41,6 +46,26 @@ Daftar Favorit
         </div>
     </section>
 </main>
+
+<!-- Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">GAGAL MENGHAPUS TAYANGAN DARI DAFTAR UNDUHAN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Tayangan minimal harus berada di daftar unduhan selama 1 hari agar bisa dihapus.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     html, body {
@@ -83,15 +108,34 @@ Daftar Favorit
         }
     }
 </style>
-
 <script>
-    const hapusButtons = document.querySelectorAll('.hapus');
-    hapusButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const row = button.parentNode.parentNode;
-            row.remove();
-        });
-    });
-</script>
+    console.log('abcdefawdqwewq')
+    async function DeleteUnduhan(event, nama_tayangan, username, id_tayangan) {
+        console.log(nama_tayangan)
+        event.preventDefault();
+        url = "/koleksi/" + "delete_unduhan/" + nama_tayangan + "/" + username + "/" + id_tayangan + "/"
+        url2 = "/koleksi/" + "daftar_unduhan/"
+        console.log(url)
+        try {
+            await fetch( url , {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+              if (response.ok) {
+                console.log('kehapus')
+                window.location.href = url2;
+              } else {
+                  console.log('trigger')
+                  $('#errorModal').modal('show');
+              }
+            });
 
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    }
+</script> 
 {% endblock %}
