@@ -27,6 +27,7 @@ def map_cursor(cursor):
 
 def query(query_str: str):
     hasil = []
+
     with connection.cursor() as cursor:
         try:
             cursor.execute("SET SEARCH_PATH TO PacilFlix")
@@ -37,7 +38,6 @@ def query(query_str: str):
         try:
             cursor.execute(query_str)
             hasil = map_cursor(cursor)
-
         except Exception as e:
             hasil = [str(e)]  # Convert the error message to a list
             connection.rollback()

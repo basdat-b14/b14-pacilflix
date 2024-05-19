@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from utils.query import query, query_insert
 from django.urls import reverse
 from django.contrib import messages
+from django.db import connection
+
+connection.ensure_connection()
 
 def is_authenticated(request):
     try:
