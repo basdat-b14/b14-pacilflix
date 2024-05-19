@@ -28,9 +28,12 @@ Daftar Favorit
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="vertical-align: middle;">Oppenheimer</td>
-                                        <td style="vertical-align: middle;">2024-04-27 09:25:17</td>
+                                        {% for favorit in daftar_favorit %}
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ favorit.judul }}</td>
+                                            <td style="vertical-align: middle;">{{ favorit.timestamp }}</td>
                                         <td style="vertical-align: middle;"><button class="btn btn-danger btn-sm hapus">Hapus</button></td>
+                                        {% endfor %}
                                     </tr>
                                 </tbody>
                             </table>

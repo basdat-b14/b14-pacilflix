@@ -18,7 +18,7 @@ def contributor_list_view(request):
     return render(request, 'Daftar_Kontributor.html')
 
 def daftar_unduhan_view(request):
-    print('test')
+   
 
     username = request.session.get('username')
     print(username)
@@ -59,58 +59,30 @@ def daftar_unduhan_view(request):
         
 
 def daftar_favorit_view(request): 
-    return render(request, 'Daftar_Favorit.html')
+    username = request.session.get('username')
+    with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT judul, timestamp
+                        FROM "PacilFlix"."DAFTAR_FAVORIT"
+                        WHERE username = %s;
+                    """, [username])
+                    daftar_favorit = cursor.fetchall()
+                    
+    daftar_favorit_dicts = [
+        {'judul': row[0],'timestamp': row[1]} for row in daftar_favorit
+    ]
+    
+    context = {
+        'daftar_favorit' : daftar_favorit_dicts
+    }
+    print(daftar_favorit_dicts)
+                    
+                    
+    return render(request, 'Daftar_Favorit.html', context)
 
 
 
-
-# @csrf_exempt
-# def delete_unduhan(request,nama_tayangan,username, id_tayangan):
   
-
-#     with connection.cursor() as cursor:
-#             cursor.execute("""
-#                 DELETE FROM "PacilFlix"."TAYANGAN_TERUNDUH"
-#                 WHERE id_tayangan = %s AND username = %s
-                
-#             """, [id_tayangan, username])
-#             result = cursor.fetchall()
-            
-#     print('ini adalah result: ', result)
-
-#     if result != []:
-#             # print('ini adalah result: ', result)
-#             # return JsonResponse({'message': 'Tayangan tidak dapat dihapus karena belum terunduh lebih dari 1 hari.'})
-            
-#            raise errors.RaiseException("Tayangan tidak dapat dihapus karena belum terunduh lebih dari 1 hari.")
-            
-#     else :
-#         return redirect('koleksi:Daftar_Unduhan') 
-
-
-# @csrf_exempt
-# def delete_unduhan(request, nama_tayangan, username, id_tayangan):
-#     try:
-#         with connection.cursor() as cursor:
-#             cursor.execute("""
-#                 DELETE FROM "PacilFlix"."TAYANGAN_TERUNDUH"
-#                 WHERE id_tayangan = %s AND username = %s
-#             """, [id_tayangan, username])
-#             result = cursor.fetchall()
-            
-        
-#         if result == []:
-#             raise errors.RaiseException("Tayangan tidak dapat dihapus karena belum terunduh lebih dari 1 hari.")
-#         else:
-#             return JsonResponse({'success': True})
-#     except errors.RaiseException as e:
-#         if "Tayangan tidak dapat dihapus karena belum terunduh lebih dari 1 hari." in str(e):
-#             print('here2')
-#             return JsonResponse({'success': False, 'error': str(e)})
-#     except Exception as e:
-#         print('here1')
-#         return JsonResponse({'success': False, 'error': 'An unexpected error occurred.'})
-       
        
 @csrf_exempt
 def delete_unduhan(request, nama_tayangan, username, id_tayangan):
