@@ -688,59 +688,6 @@ def save_progress_film(request):
             ''')
 
     return redirect('media_tayangan:film_view', judul=judul)
-    
-# def ulasan(request):
-#     if not is_authenticated(request):
-#         return redirect('/login')
-    
-#     if request.method == 'POST':
-#         judul = request.POST.get('judul')
-#         rating = request.POST.get('rating')
-#         deskripsi = request.POST.get('deskripsi')
-#         username = request.session.get('username')
-
-#         print(username, judul, rating, deskripsi)
-
-#         if judul and rating and deskripsi and username:
-#             query_insert(f'''
-#                 INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
-#                 VALUES (
-#                     (SELECT
-#                         t.id
-#                     FROM
-#                         "PacilFlix"."TAYANGAN" AS t
-#                     WHERE
-#                         t.judul = '{judul}'
-#                     ),
-#                     DATE_TRUNC('second', current_timestamp),
-#                     '{username}',
-#                     {rating},
-#                     '{deskripsi}'
-#                 );
-#             ''')
-
-#         tayangan_type = query(
-#             f'''SELECT
-#                 CASE
-#                 WHEN EXISTS (
-#                     SELECT 1
-#                     FROM "PacilFlix"."SERIES"
-#                     WHERE id_tayangan = (
-#                     SELECT id
-#                     FROM "PacilFlix"."TAYANGAN"
-#                     WHERE judul = '{judul}'
-#                     )
-#                 ) THEN 'series'
-#                 ELSE 'film'
-#                 END AS tayangan_type;
-#             '''
-#         )
-
-#     if tayangan_type[0].tayangan_type == 'series':
-#         return redirect('media_tayangan:series_view', judul=judul)
-#     else:
-#         return redirect('media_tayangan:film_view', judul=judul)
-
 
 def ulasan(request):
     if not is_authenticated(request):
