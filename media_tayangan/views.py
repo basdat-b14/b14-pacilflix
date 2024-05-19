@@ -727,28 +727,28 @@ def ulasan(request):
             else:
                 return redirect('media_tayangan:film_view', judul=judul)
         
-        if judul and rating and deskripsi and username:
-            warning_message = query_insert(f'''
-                INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
-                VALUES (
-                    (SELECT
-                        t.id
-                    FROM
-                        "PacilFlix"."TAYANGAN" AS t
-                    WHERE
-                        t.judul = '{judul}'
-                    ),
-                    DATE_TRUNC('second', current_timestamp),
-                    '{username}',
-                    {rating},
-                    '{deskripsi}'
-                );
-            ''')
+        warning_message = query_insert(f'''
+            INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
+            VALUES (
+                (SELECT
+                    t.id
+                FROM
+                    "PacilFlix"."TAYANGAN" AS t
+                WHERE
+                    t.judul = '{judul}'
+                ),
+                DATE_TRUNC('second', current_timestamp),
+                '{username}',
+                {rating},
+                '{deskripsi}'
+            );
+        ''')
 
+        if warning_message:
             if tayangan_type[0].tayangan_type == 'series':
                 return redirect(reverse('media_tayangan:series_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
             else:
-                return redirect(reverse('media_tayangan:film_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
+                return redirect(reverse('media_tayangan:film_view', kwargs={'judul': judul}) + f'?warning={warning_message}') 
         else:
             if tayangan_type[0].tayangan_type == 'series':
                 return redirect('media_tayangan:series_view', judul=judul)
