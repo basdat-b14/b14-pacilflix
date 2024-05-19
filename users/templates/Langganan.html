@@ -123,6 +123,12 @@ PacilFlix | Manage Subscription
 </main>
 
 <style>
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto; 
+    }
+
     .beli-btn {
         background-color: #6a5acd;
         color: white;
@@ -151,6 +157,12 @@ PacilFlix | Manage Subscription
             overflow-x: auto;
         }
     }
+
+    /* Prevent bouncing effect */
+    body {
+        overscroll-behavior: none;
+    }
 </style>
+
 
 {% endblock %}
