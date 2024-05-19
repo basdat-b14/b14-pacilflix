@@ -1,10 +1,8 @@
 import psycopg2
 from psycopg2 import Error
-from django.conf import settings
 from django.db import connection
 from collections import namedtuple
-from psycopg2.extras import RealDictCursor
-from django.db import DatabaseError, IntegrityError, transaction
+from django.db import IntegrityError
 
 
 try : 
@@ -57,7 +55,10 @@ def query_insert(query_str: str):
         try:
             cursor.execute(query_str)
             connection.commit()
-            return True
+            return None
+        except IntegrityError as e:
+            connection.rollback()
+            return str(e)
         except Exception as e:
             connection.rollback()
-            raise e
+            return str(e)
