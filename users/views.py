@@ -3,13 +3,11 @@ from venv import logger
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password, check_password
-from main.views import execute_query, is_authenticated
+import psycopg2
 from utils.query import query
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import now
-
-
-
+from psycopg2.extras import RealDictCursor
 
 
 
@@ -124,4 +122,37 @@ def combined_subscription_view(request):
     return render(request, 'Langganan.html', {'packages': packages, 'subscriptions': subscriptions, 'active_subscription': active_subscription[0] if active_subscription else None})
 
 
-#     return redirect('users:dasboard_pengguna')
+def execute_query(query, params=None):
+    connection = get_connection()
+    if connection is None:
+        return {"error": "Connection to database failed"}, False
+    try:
+        with connection.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("""SET search_path TO "PacilFlix" """)
+            cursor.execute(query, params)
+            if query.strip().lower().startswith('select'):
+                results = cursor.fetchall()
+                return results, True
+            connection.commit()
+            return {"message": "Query executed successfully"}, True
+    except Exception as e:
+        connection.rollback()
+        return str(e), False
+    finally:
+        connection.close()
+
+
+def get_connection():
+    try:
+        connection = psycopg2.connect(
+            dbname='postgres',
+            user='postgres.zdigjyodrdhsvdsdvuvo',
+            password='Pacilflixjayajayajaya',
+            host='aws-0-ap-southeast-1.pooler.supabase.com',
+            port='5432'
+        )
+        return connection
+    except psycopg2.Error as error:
+        print(f"Error while connecting to PostgreSQL: {error}")
+        return None
+
