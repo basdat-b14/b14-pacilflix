@@ -5,7 +5,7 @@ Tugas Kelompok Basis Data (CSGE602070) - diselenggarakan oleh Fakultas Ilmu Komp
 Akses PacilFlix [di sini](https://web-production-e099.up.railway.app/)
 
 ## User Guide 📖
-Akses user manual guide PacilFlix [di sini](#)
+Akses user manual guide PacilFlix [di sini](https://docs.google.com/document/d/1un1TUKklryBBbBfxS6GqeYuzAPyiTu12FbgOlDDE_ho/edit?usp=sharing)
 
 ## Developers 🛠️
 * [Gyanamurti Adhikara Bano](https://github.com/Gyan-Bano) - 2206082266
