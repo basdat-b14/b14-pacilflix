@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from utils.query import query
 from django.views.decorators.csrf import csrf_exempt
 
+
 def subscription_page(request):
     return render(request, 'Langganan.html')
 
