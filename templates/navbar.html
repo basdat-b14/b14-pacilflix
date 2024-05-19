@@ -26,11 +26,11 @@
                                         <ul id="navigation">    
                                             {% if request.session.is_authenticated %}
                                                 <li><a href="{% url 'media_tayangan:tayangan_view' %}">Daftar Tayangan</a></li>
-                                                <li><a href="{% url 'daftar_kontributor_page' %}">Daftar Kontributor</a></li>
+                                                <li><a href="{% url 'koleksi:daftar_kontributor_page' %}">Daftar Kontributor</a></li>
                                                 <li><a href="#">Kelola</a>
                                                     <ul class="submenu">
-                                                        <li><a href="#">Kelola Daftar Favorit</a></li>
-                                                        <li><a href="#">Kelola Daftar Unduhan</a></li>
+                                                        <li><a href="{%url 'koleksi:daftar_favorit' %}">Kelola Daftar Favorit</a></li>
+                                                        <li><a href="{%url 'koleksi:daftar_unduhan' %}">Kelola Daftar Unduhan</a></li>
                                                         <li><a href="{% url 'users:subscription_page' %}">Kelola Langganan</a></li>
                                                     </ul>
                                                 </li>
