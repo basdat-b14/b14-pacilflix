@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from utils.query import query, query_insert
 from django.urls import reverse
+from django.contrib import messages
 
 def is_authenticated(request):
     try:
@@ -699,6 +700,30 @@ def ulasan(request):
         deskripsi = request.POST.get('deskripsi')
         username = request.session.get('username')
 
+        tayangan_type = query(
+            f'''SELECT
+                CASE
+                WHEN EXISTS (
+                    SELECT 1
+                    FROM "PacilFlix"."SERIES"
+                    WHERE id_tayangan = (
+                    SELECT id
+                    FROM "PacilFlix"."TAYANGAN"
+                    WHERE judul = '{judul}'
+                    )
+                ) THEN 'series'
+                ELSE 'film'
+                END AS tayangan_type;
+            '''
+        )
+
+        if not deskripsi and not rating:
+            messages.error(request, 'Rating dan deskripsi harus diisi')
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect('media_tayangan:series_view', judul=judul)
+            else:
+                return redirect('media_tayangan:film_view', judul=judul)
+        
         if judul and rating and deskripsi and username:
             warning_message = query_insert(f'''
                 INSERT INTO "PacilFlix"."ULASAN" (id_tayangan, timestamp, username, rating, deskripsi)
@@ -717,45 +742,12 @@ def ulasan(request):
                 );
             ''')
 
-            if warning_message:
-                tayangan_type = query(
-                    f'''SELECT
-                        CASE
-                        WHEN EXISTS (
-                            SELECT 1
-                            FROM "PacilFlix"."SERIES"
-                            WHERE id_tayangan = (
-                            SELECT id
-                            FROM "PacilFlix"."TAYANGAN"
-                            WHERE judul = '{judul}'
-                            )
-                        ) THEN 'series'
-                        ELSE 'film'
-                        END AS tayangan_type;
-                    '''
-                )
-                if tayangan_type[0].tayangan_type == 'series':
-                    return redirect(reverse('media_tayangan:series_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
-                else:
-                    return redirect(reverse('media_tayangan:film_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect(reverse('media_tayangan:series_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
             else:
-                tayangan_type = query(
-                    f'''SELECT
-                        CASE
-                        WHEN EXISTS (
-                            SELECT 1
-                            FROM "PacilFlix"."SERIES"
-                            WHERE id_tayangan = (
-                            SELECT id
-                            FROM "PacilFlix"."TAYANGAN"
-                            WHERE judul = '{judul}'
-                            )
-                        ) THEN 'series'
-                        ELSE 'film'
-                        END AS tayangan_type;
-                    '''
-                )
-                if tayangan_type[0].tayangan_type == 'series':
-                    return redirect('media_tayangan:series_view', judul=judul)
-                else:
-                    return redirect('media_tayangan:film_view', judul=judul)
+                return redirect(reverse('media_tayangan:film_view', kwargs={'judul': judul}) + f'?warning={warning_message}')
+        else:
+            if tayangan_type[0].tayangan_type == 'series':
+                return redirect('media_tayangan:series_view', judul=judul)
+            else:
+                return redirect('media_tayangan:film_view', judul=judul)

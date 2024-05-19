@@ -129,7 +129,7 @@ PacilFlix | Halaman Series
 
                 <div class="row pl-5 pb-2">
                     <div class="col-md-6">
-                        <form method="post">
+                        <form method="post" onsubmit="return validateForm()">
                             {% csrf_token %}
                             <input type="hidden" name="judul" value="{{ series_data.0.judul }}">
                             <div class="form-group">
@@ -137,14 +137,20 @@ PacilFlix | Halaman Series
                                 <textarea class="form-control" name="deskripsi" id="reviewDescription" rows="2"></textarea>
                             </div>
                             <div class="form-group">
-                                <h4>Rating series</h4>
+                                <h4>Rating film</h4>
                                 <input type="number" class="form-control" name="rating" id="rating" step="1" min="1" max="5">
                             </div>
                             <button type="submit" formaction="{% url 'media_tayangan:ulasan' %}" class="custom-btn">Submit</button>
                         </form>
+                        <div id="errorMessage" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="display: none;">
+                            <strong>Gagal menambahkan review</strong> <br> Harap isi semua field sebelum mengirimkan ulasan.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         {% if warning_message %}
                             <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                                <strong>Tidak bisa menambahkan review</strong> <br> {{ warning_message }}
+                                <strong>Tidak dapat menambahkan review</strong> <br> {{ warning_message }}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -178,58 +184,67 @@ PacilFlix | Halaman Series
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    function validateForm() {
+        var description = document.getElementById("reviewDescription").value;
+        var rating = document.getElementById("rating").value;
+
+        if (description.trim() === "" || rating.trim() === "") {
+            document.getElementById("errorMessage").style.display = "block";
+            return false;
+        }
+
+        return true;
+    }
     // Ambil referensi ke tombol "Tambah ke Favorit"
-const addToFavoritesBtn = document.querySelector('.custom-btn:last-child');
+    const addToFavoritesBtn = document.querySelector('.custom-btn:last-child');
 
-// Ambil referensi ke modal
-const favoritesModal = document.getElementById('favoritesModal');
+    // Ambil referensi ke modal
+    const favoritesModal = document.getElementById('favoritesModal');
 
-// Tambahkan event listener pada tombol "Tambah ke Favorit"
-addToFavoritesBtn.addEventListener('click', () => {
-  // Munculkan modal
-  $(favoritesModal).modal('show');
-});
+    // Tambahkan event listener pada tombol "Tambah ke Favorit"
+    addToFavoritesBtn.addEventListener('click', () => {
+    // Munculkan modal
+    $(favoritesModal).modal('show');
+    });
 
-// Ambil referensi ke tombol "Tambah" di dalam modal
-const addToFavoritesModalBtn = document.getElementById('addToFavoritesBtn');
+    // Ambil referensi ke tombol "Tambah" di dalam modal
+    const addToFavoritesModalBtn = document.getElementById('addToFavoritesBtn');
 
-// Tambahkan event listener pada tombol "Tambah"
-addToFavoritesModalBtn.addEventListener('click', () => {
-  // Sembunyikan modal
-  $(favoritesModal).modal('hide');
+    // Tambahkan event listener pada tombol "Tambah"
+    addToFavoritesModalBtn.addEventListener('click', () => {
+    // Sembunyikan modal
+    $(favoritesModal).modal('hide');
 
-  // Tampilkan pesan sukses
-  alert('Sukses!');
-});
+    // Tampilkan pesan sukses
+    alert('Sukses!');
+    });
 
-// Ambil referensi ke tombol "Unduh"
-const downloadBtn = document.querySelectorAll('.custom-btn')[0];
+    // Ambil referensi ke tombol "Unduh"
+    const downloadBtn = document.querySelectorAll('.custom-btn')[0];
 
-// Ambil referensi ke modal unduhan
-const downloadModal = document.getElementById('downloadModal');
+    // Ambil referensi ke modal unduhan
+    const downloadModal = document.getElementById('downloadModal');
 
-// Ambil referensi ke elemen span untuk judul tayangan dan tanggal kedaluwarsa
-const downloadedTitleSpan = document.getElementById('downloadedTitle');
-const expirationDateSpan = document.getElementById('expirationDate');
+    // Ambil referensi ke elemen span untuk judul tayangan dan tanggal kedaluwarsa
+    const downloadedTitleSpan = document.getElementById('downloadedTitle');
+    const expirationDateSpan = document.getElementById('expirationDate');
 
-// Tambahkan event listener pada tombol "Unduh"
-downloadBtn.addEventListener('click', () => {
-  // Ambil judul tayangan dari halaman
-  const seriesTitle = document.querySelector('h4 > b').nextSibling.textContent.trim();
+    // Tambahkan event listener pada tombol "Unduh"
+    downloadBtn.addEventListener('click', () => {
+    // Ambil judul tayangan dari halaman
+    const seriesTitle = document.querySelector('h4 > b').nextSibling.textContent.trim();
 
-  // Hitung tanggal kedaluwarsa (7 hari dari sekarang)
-  const expirationDate = new Date();
-  expirationDate.setDate(expirationDate.getDate() + 7);
+    // Hitung tanggal kedaluwarsa (7 hari dari sekarang)
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7);
 
-  // Atur nilai elemen span dengan judul tayangan dan tanggal kedaluwarsa
-  downloadedTitleSpan.textContent = seriesTitle;
-  expirationDateSpan.textContent = expirationDate.toLocaleDateString();
+    // Atur nilai elemen span dengan judul tayangan dan tanggal kedaluwarsa
+    downloadedTitleSpan.textContent = seriesTitle;
+    expirationDateSpan.textContent = expirationDate.toLocaleDateString();
 
-  // Munculkan modal
-  $(downloadModal).modal('show');
-}); 
+    // Munculkan modal
+    $(downloadModal).modal('show');
+    }); 
 </script>
-
-
 
 {% endblock %}

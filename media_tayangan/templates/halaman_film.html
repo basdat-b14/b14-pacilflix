@@ -126,7 +126,7 @@ PacilFlix | Halaman Film
 
                 <div class="row pl-5 pb-2">
                     <div class="col-md-6">
-                        <form method="post">
+                        <form method="post" onsubmit="return validateForm()">
                             {% csrf_token %}
                             <input type="hidden" name="judul" value="{{ film_data.0.judul }}">
                             <div class="form-group">
@@ -139,9 +139,15 @@ PacilFlix | Halaman Film
                             </div>
                             <button type="submit" formaction="{% url 'media_tayangan:ulasan' %}" class="custom-btn">Submit</button>
                         </form>
+                        <div id="errorMessage" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="display: none;">
+                            <strong>Gagal menambahkan review</strong> <br> Harap isi semua field sebelum mengirimkan ulasan.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         {% if warning_message %}
                             <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                                <strong>Tidak bisa menambahkan review</strong> <br> {{ warning_message }}
+                                <strong>Tidak dapat menambahkan review</strong> <br> {{ warning_message }}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -171,9 +177,21 @@ PacilFlix | Halaman Film
         </div>
     </body>
 </main>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    function validateForm() {
+        var description = document.getElementById("reviewDescription").value;
+        var rating = document.getElementById("rating").value;
+
+        if (description.trim() === "" || rating.trim() === "") {
+            document.getElementById("errorMessage").style.display = "block";
+            return false;
+        }
+
+        return true;
+    }
     
     const addToFavoritesBtn = document.querySelector('.custom-btn:last-child');
 
@@ -197,11 +215,7 @@ PacilFlix | Halaman Film
         // Tampilkan pesan sukses
         alert('Sukses!');
     });
-
-
-
     
-   
     const downloadBtn = document.querySelectorAll('.custom-btn')[1];
     
    
@@ -228,4 +242,5 @@ PacilFlix | Halaman Film
       $(downloadModal).modal('show');
     });  
 </script>
+
 {% endblock %}
